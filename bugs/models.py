@@ -17,40 +17,22 @@ class Bug(models.Model):
     )
 
     type = models.CharField(
-        max_length=100,
+        max_length=10,
         choices=BugTypeChoices,
+        db_index=True,
     )
 
     max_health_points = models.PositiveIntegerField(
-        validators=[
-            MinValueValidator(0),
-        ],
-        verbose_name='Health Points',
+        verbose_name='Health Points'
     )
 
-    armor = models.PositiveIntegerField(
-        validators=[
-            MinValueValidator(0),
-        ],
-    )
+    armor = models.PositiveIntegerField()
 
-    strength = models.PositiveIntegerField(
-        validators=[
-            MinValueValidator(0),
-        ],
-    )
+    strength = models.PositiveIntegerField()
 
-    mobility = models.PositiveIntegerField(
-        validators=[
-            MinValueValidator(0),
-        ],
-    )
+    mobility = models.PositiveIntegerField()
 
-    healing_factor = models.PositiveIntegerField(
-        validators=[
-            MinValueValidator(0),
-        ],
-    )
+    healing_factor = models.PositiveIntegerField()
 
     natural_habitat = models.ForeignKey(
         to="locations.Location",
@@ -64,10 +46,7 @@ class Bug(models.Model):
         verbose_name='Bug Image',
     )
 
-    description = models.TextField(
-        null=True,
-        blank=True,
-    )
+    description = models.TextField()
 
     is_active = models.BooleanField(
         default=False,
@@ -78,8 +57,17 @@ class Bug(models.Model):
 
     def save(self, *args, **kwargs):
         if self.is_active:
-            Bug.objects.filter(is_active=True).update(is_active=False)
+            Bug.objects.filter(is_active=True).exclude(pk=self.pk).update(is_active=False)
         super().save(*args, **kwargs)
+
+    def total_power(self):
+        return (
+            self.max_health_points +
+            self.armor +
+            self.strength +
+            self.mobility +
+            self.healing_factor
+        )
 
     class Meta:
         ordering = ('name',)
