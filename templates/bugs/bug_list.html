@@ -1,0 +1,21 @@
+{% extends 'common/base.html' %}
+{% block title %}Bug List – BattleBugz{% endblock %}
+{% block content %}
+
+<div class="container py-4">
+    <h1 class="mb-4">🐛 Bug List</h1>
+
+    {% if bugs %}
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-4">
+            {% for bug in bugs %}
+                <div class="col">
+                    {% include 'common/bug_card.html' %}
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info">No bugs found.</div>
+    {% endif %}
+</div>
+
+{% endblock %}
