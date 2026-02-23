@@ -59,6 +59,7 @@ class Bug(models.Model):
             Bug.objects.filter(is_active=True).exclude(pk=self.pk).update(is_active=False)
         super().save(*args, **kwargs)
 
+    @property
     def total_power(self):
         return (
             self.max_health_points +

@@ -1,0 +1,58 @@
+{% extends 'common/base.html' %}
+{% block title %}{{ bug.name }} – BattleBugz{% endblock %}
+{% block content %}
+
+<div class="container py-4">
+    <a href="{% url 'bugs:list' %}" class="btn btn-outline-secondary btn-sm mb-4">← Back to list</a>
+
+    <div class="row g-4">
+        <div class="col-md-4 text-center">
+            <img src="{{ bug.image_url }}" class="img-fluid rounded shadow" style="max-height: 350px; object-fit: contain;" alt="{{ bug.name }}">
+        </div>
+
+        <div class="col-md-8">
+            <div class="d-flex align-items-center gap-2 mb-1">
+                <h2 class="mb-0">{{ bug.name }}</h2>
+                {% if bug.is_active %}<span class="badge bg-success">Active</span>{% endif %}
+                <span class="badge
+                    {% if bug.type == 'FIRE' %}bg-danger
+                    {% elif bug.type == 'WATER' %}bg-primary
+                    {% elif bug.type == 'EARTH' %}bg-warning text-dark
+                    {% elif bug.type == 'GRASS' %}bg-success
+                    {% endif %}">
+                    {{ bug.get_type_display }}
+                </span>
+            </div>
+
+            {% if bug.natural_habitat %}
+                <p class="text-muted mb-3">📍 {{ bug.natural_habitat }}</p>
+            {% endif %}
+
+            <p class="mb-4">{{ bug.description }}</p>
+
+            <h5>Stats</h5>
+            <ul class="list-group list-group-flush mb-3">
+                <li class="list-group-item d-flex justify-content-between">
+                    <span>❤️ Health Points</span><strong>{{ bug.max_health_points }}</strong>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <span>🛡️ Armor</span><strong>{{ bug.armor }}</strong>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <span>⚔️ Strength</span><strong>{{ bug.strength }}</strong>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <span>💨 Mobility</span><strong>{{ bug.mobility }}</strong>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <span>💚 Healing Factor</span><strong>{{ bug.healing_factor }}</strong>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <span>⚡ Total Power</span><strong>{{ bug.total_power }}</strong>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
