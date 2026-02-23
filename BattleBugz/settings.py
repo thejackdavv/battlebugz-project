@@ -32,7 +32,7 @@ ALLOWED_HOSTS = []
 
 # Application definition
 PROJECT_APPS = [
-    'bugz',
+    'bugs',
     'locations',
     'battles',
 ]
