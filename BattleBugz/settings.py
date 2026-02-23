@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 import os
+from email.policy import default
 from pathlib import Path
 from decouple import config
 
@@ -25,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG=config('DEBUG', cast=bool)
+DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = []
 
@@ -35,6 +36,7 @@ PROJECT_APPS = [
     'bugs',
     'locations',
     'battles',
+    'common',
 ]
 
 INSTALLED_APPS = [
