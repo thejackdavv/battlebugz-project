@@ -70,3 +70,10 @@ class Bug(models.Model):
 
     class Meta:
         ordering = ('name',)
+        constraints = [
+            models.UniqueConstraint(
+                fields=['is_active'],
+                condition=models.Q(is_active=True),
+                name='only_one_active_bug',
+            )
+        ]
