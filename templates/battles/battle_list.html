@@ -1,0 +1,80 @@
+{% extends 'common/base.html' %}
+{% block title %}Battle History – BattleBugz{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="mb-4">⚔️ Battle History</h1>
+
+    {% if battles %}
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Attacker</th>
+                    <th>Defender</th>
+                    <th>📍 Location</th>
+                    <th class="text-center">Rounds</th>
+                    <th>🏆 Winner</th>
+                    <th>Date</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for battle in battles %}
+                <tr>
+                    <td class="text-muted small">{{ forloop.counter }}</td>
+
+                    <td>
+                        <div class="d-flex align-items-center gap-2">
+                            <img src="{{ battle.attacker.image_url }}" style="height:36px; width:36px; object-fit:contain;">
+                            <span class="fw-semibold">{{ battle.attacker.name }}</span>
+                            <span class="badge
+                                {% if battle.attacker.type == 'FIRE' %}bg-danger
+                                {% elif battle.attacker.type == 'WATER' %}bg-primary
+                                {% elif battle.attacker.type == 'EARTH' %}bg-warning text-dark
+                                {% elif battle.attacker.type == 'GRASS' %}bg-success
+                                {% endif %}">
+                                {{ battle.attacker.get_type_display }}
+                            </span>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div class="d-flex align-items-center gap-2">
+                            <img src="{{ battle.defender.image_url }}" style="height:36px; width:36px; object-fit:contain;">
+                            <span class="fw-semibold">{{ battle.defender.name }}</span>
+                            <span class="badge
+                                {% if battle.defender.type == 'FIRE' %}bg-danger
+                                {% elif battle.defender.type == 'WATER' %}bg-primary
+                                {% elif battle.defender.type == 'EARTH' %}bg-warning text-dark
+                                {% elif battle.defender.type == 'GRASS' %}bg-success
+                                {% endif %}">
+                                {{ battle.defender.get_type_display }}
+                            </span>
+                        </div>
+                    </td>
+
+                    <td class="small">{{ battle.location }}</td>
+
+                    <td class="text-center small">{{ battle.rounds }}</td>
+
+                    <td>
+                        <span class="badge bg-warning text-dark">🏆 {{ battle.winner }}</span>
+                    </td>
+
+                    <td class="text-muted small text-nowrap">{{ battle.time_stamp|date:"d M Y H:i" }}</td>
+
+                    <td>
+                        <a href="{% url 'battles:detail' battle.pk %}" class="btn btn-sm btn-outline-primary">View</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <div class="alert alert-info">No battles recorded yet.</div>
+    {% endif %}
+</div>
+{% endblock %}

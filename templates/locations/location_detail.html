@@ -67,6 +67,42 @@
                 </div>
             </div>
 
+            {# ── Battle ─────────────────────────────────────────── #}
+            {% with opponents=location.bugs.all %}
+            <div class="card mb-4
+                {% if location.type == 'FIRE' %}border-danger
+                {% elif location.type == 'WATER' %}border-primary
+                {% elif location.type == 'EARTH' %}border-warning
+                {% elif location.type == 'GRASS' %}border-success
+                {% endif %}">
+                <div class="card-body">
+                    <h6 class="mb-3">⚔️ Start a Battle</h6>
+                    {% if not active_bug %}
+                        <p class="text-danger small mb-0">No active bug — <a href="{% url 'bugs:list' %}">activate one</a> first.</p>
+                    {% else %}
+                        {% with valid_opponents=opponents|dictsort:"name" %}
+                        {% if opponents %}
+                        <form method="post" action="{% url 'battles:start' location.pk %}" class="d-flex gap-2 align-items-center flex-wrap">
+                            {% csrf_token %}
+                            <select name="defender_id" class="form-select form-select-sm" style="max-width: 220px;" required>
+                                <option value="">— choose opponent —</option>
+                                {% for bug in opponents %}
+                                    {% if bug != active_bug %}
+                                    <option value="{{ bug.pk }}">{{ bug.name }} ({{ bug.get_type_display }})</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                            <button type="submit" class="btn btn-sm btn-danger">⚔️ Battle!</button>
+                        </form>
+                        {% else %}
+                            <p class="text-muted small mb-0">No other bugs live here to battle.</p>
+                        {% endif %}
+                        {% endwith %}
+                    {% endif %}
+                </div>
+            </div>
+            {% endwith %}
+
             {# ── Resident bugs ──────────────────────────────────── #}
             <h5>🐛 Resident Bugs</h5>
             {% with bugs=location.bugs.all %}
