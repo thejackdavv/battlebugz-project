@@ -4,7 +4,47 @@
 {% block title %}Welcome to BattleBugz{% endblock %}
 
 {% block content %}
-<div class="container text-center mt-5">
-    <img src="{% static 'images/Welcome-View.png' %}" alt="Welcome to BattleBugz" class="img-fluid">
+
+{# ── Hero image ───────────────────────────────────────────── #}
+<div class="w-100 mb-5" style="max-height: 420px; overflow: hidden;">
+    <img src="{% static 'images/homepage-image.jpg' %}" alt="BattleBugz"
+         class="w-100 object-fit-cover" style="max-height: 420px;">
 </div>
+
+<div class="container pb-5">
+
+    {# ── Intro ────────────────────────────────────────────── #}
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold">Welcome to BattleBugz 🐛</h1>
+        <p class="lead text-muted">
+            Collect, train and battle bugs from across the world.
+            Explore habitats, discover rare species and build the ultimate team.
+        </p>
+        <div class="d-flex justify-content-center gap-3 mt-3">
+            <a href="{% url 'bugs:list' %}" class="btn btn-primary btn-lg">Browse Bugs</a>
+            <a href="{% url 'locations:list' %}" class="btn btn-outline-secondary btn-lg">Explore Locations</a>
+        </div>
+    </div>
+
+    {# ── Spotlight row ────────────────────────────────────── #}
+    <div class="row g-4 justify-content-center">
+
+        {% if top_bug %}
+        <div class="col-12 col-md-5">
+            <h5 class="mb-3 text-center">⚡ Strongest Bug</h5>
+            {% include 'common/bug_card.html' with bug=top_bug %}
+        </div>
+        {% endif %}
+
+        {% if top_location %}
+        <div class="col-12 col-md-5">
+            <h5 class="mb-3 text-center">📍 Most Active Location</h5>
+            {% include 'common/location_card.html' with location=top_location %}
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+
 {% endblock %}
+
