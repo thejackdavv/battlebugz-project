@@ -5,6 +5,10 @@
 <div class="container py-4">
     <h1 class="mb-4">🐛 Bug List</h1>
 
+    <div class="mb-4">
+        {% include 'common/search_bar.html' %}
+    </div>
+
     {% if bugs %}
         <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-4">
             {% for bug in bugs %}
@@ -16,6 +20,9 @@
     {% else %}
         <div class="alert alert-info">No bugs found.</div>
     {% endif %}
+
+    {% include 'common/paginator.html' %}
+
 </div>
 
 {% endblock %}
