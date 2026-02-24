@@ -1,1 +1,15 @@
-not found
+{% extends 'common/base.html' %}
+
+{% block title %}404 — Page Not Found{% endblock %}
+
+{% block content %}
+<div class="container d-flex flex-column align-items-center justify-content-center py-5" style="min-height: 60vh;">
+    <div class="text-center">
+        <h1 class="display-1 fw-bold text-danger">404</h1>
+        <h2 class="mb-3">Your bug wandered off the map 🐛</h2>
+        <p class="text-muted mb-4">The page you're looking for doesn't exist or has been moved.</p>
+        <a href="{% url 'common:welcome' %}" class="btn btn-primary btn-lg me-2">🏠 Go Home</a>
+        <a href="{% url 'bugs:list' %}" class="btn btn-outline-secondary btn-lg">🐝 My Bugs</a>
+    </div>
+</div>
+{% endblock %}

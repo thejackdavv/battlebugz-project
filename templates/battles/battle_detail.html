@@ -1,0 +1,153 @@
+{% extends 'common/base.html' %}
+{% block title %}{{ battle.attacker }} vs {{ battle.defender }} – BattleBugz{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    {# ── Header ─────────────────────────────────────────────── #}
+    <div class="text-center mb-4">
+        <h2 class="fw-bold">⚔️ Battle Report</h2>
+        <p class="text-muted mb-1">📍 {{ battle.location }} &nbsp;·&nbsp; {{ battle.rounds }} round{{ battle.rounds|pluralize }}</p>
+        <span class="badge bg-warning text-dark fs-6">🏆 Winner: {{ battle.winner }}</span>
+    </div>
+
+    <div class="row g-3 align-items-start">
+
+        {# ── Attacker card ──────────────────────────────────── #}
+        <div class="col-md-3">
+            <div class="card h-100 shadow-sm {% if battle.winner == battle.attacker %}border-warning border-2{% endif %}">
+                <div class="card-header text-center fw-semibold small text-muted">Attacker</div>
+                <img src="{{ battle.attacker.image_url }}" class="card-img-top object-fit-contain p-2"
+                     style="height: 140px;" alt="{{ battle.attacker.name }}">
+                <div class="card-body text-center">
+                    <h6 class="mb-1">{{ battle.attacker.name }}
+                        {% if battle.winner == battle.attacker %}
+                            <span class="badge bg-warning text-dark">🏆</span>
+                        {% endif %}
+                    </h6>
+                    <span class="badge mb-2
+                        {% if battle.attacker.type == 'FIRE' %}bg-danger
+                        {% elif battle.attacker.type == 'WATER' %}bg-primary
+                        {% elif battle.attacker.type == 'EARTH' %}bg-warning text-dark
+                        {% elif battle.attacker.type == 'GRASS' %}bg-success
+                        {% endif %}">
+                        {{ battle.attacker.get_type_display }}
+                    </span>
+                    <ul class="list-group list-group-flush small text-start mt-2">
+                        <li class="list-group-item px-0 d-flex justify-content-between py-1">
+                            <span>❤️ HP</span><strong>{{ battle.attacker.max_health_points }}</strong>
+                        </li>
+                        <li class="list-group-item px-0 d-flex justify-content-between py-1">
+                            <span>🛡️ Armor</span><strong>{{ battle.attacker.armor }}</strong>
+                        </li>
+                        <li class="list-group-item px-0 d-flex justify-content-between py-1">
+                            <span>⚔️ Strength</span><strong>{{ battle.attacker.strength }}</strong>
+                        </li>
+                        <li class="list-group-item px-0 d-flex justify-content-between py-1">
+                            <span>💨 Mobility</span><strong>{{ battle.attacker.mobility }}</strong>
+                        </li>
+                        <li class="list-group-item px-0 d-flex justify-content-between py-1">
+                            <span>💚 Healing</span><strong>{{ battle.attacker.healing_factor }}</strong>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        {# ── Battle log ─────────────────────────────────────── #}
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header fw-semibold text-center">📋 Round Log</div>
+                <div class="card-body p-0" style="max-height: 520px; overflow-y: auto;">
+                    <table class="table table-sm table-hover mb-0">
+                        <thead class="table-dark sticky-top">
+                            <tr>
+                                <th class="text-center">#</th>
+                                <th>Attacker</th>
+                                <th>Result</th>
+                                <th class="text-center">ATK HP</th>
+                                <th class="text-center">DEF HP</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for round in battle.log %}
+                            <tr class="{% if round.dodged %}table-secondary{% elif round.damage == 0 %}table-secondary{% else %}{% endif %}">
+                                <td class="text-center text-muted small">{{ round.round }}</td>
+                                <td class="small fw-semibold">{{ round.attacker }}</td>
+                                <td class="small">
+                                    {% if round.dodged %}
+                                        <span class="text-secondary">💨 Dodged</span>
+                                    {% else %}
+                                        <span class="text-danger">💥 -{{ round.damage }}</span>
+                                    {% endif %}
+                                </td>
+                                <td class="text-center small">
+                                    <span class="{% if round.attacker_hp <= 0 %}text-danger fw-bold{% endif %}">
+                                        {{ round.attacker_hp }}
+                                    </span>
+                                </td>
+                                <td class="text-center small">
+                                    <span class="{% if round.defender_hp <= 0 %}text-danger fw-bold{% endif %}">
+                                        {{ round.defender_hp }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        {# ── Defender card ──────────────────────────────────── #}
+        <div class="col-md-3">
+            <div class="card h-100 shadow-sm {% if battle.winner == battle.defender %}border-warning border-2{% endif %}">
+                <div class="card-header text-center fw-semibold small text-muted">Defender</div>
+                <img src="{{ battle.defender.image_url }}" class="card-img-top object-fit-contain p-2"
+                     style="height: 140px;" alt="{{ battle.defender.name }}">
+                <div class="card-body text-center">
+                    <h6 class="mb-1">{{ battle.defender.name }}
+                        {% if battle.winner == battle.defender %}
+                            <span class="badge bg-warning text-dark">🏆</span>
+                        {% endif %}
+                    </h6>
+                    <span class="badge mb-2
+                        {% if battle.defender.type == 'FIRE' %}bg-danger
+                        {% elif battle.defender.type == 'WATER' %}bg-primary
+                        {% elif battle.defender.type == 'EARTH' %}bg-warning text-dark
+                        {% elif battle.defender.type == 'GRASS' %}bg-success
+                        {% endif %}">
+                        {{ battle.defender.get_type_display }}
+                    </span>
+                    <ul class="list-group list-group-flush small text-start mt-2">
+                        <li class="list-group-item px-0 d-flex justify-content-between py-1">
+                            <span>❤️ HP</span><strong>{{ battle.defender.max_health_points }}</strong>
+                        </li>
+                        <li class="list-group-item px-0 d-flex justify-content-between py-1">
+                            <span>🛡️ Armor</span><strong>{{ battle.defender.armor }}</strong>
+                        </li>
+                        <li class="list-group-item px-0 d-flex justify-content-between py-1">
+                            <span>⚔️ Strength</span><strong>{{ battle.defender.strength }}</strong>
+                        </li>
+                        <li class="list-group-item px-0 d-flex justify-content-between py-1">
+                            <span>💨 Mobility</span><strong>{{ battle.defender.mobility }}</strong>
+                        </li>
+                        <li class="list-group-item px-0 d-flex justify-content-between py-1">
+                            <span>💚 Healing</span><strong>{{ battle.defender.healing_factor }}</strong>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    {# ── Footer actions ─────────────────────────────────────── #}
+    <div class="text-center mt-4">
+        <a href="{% url 'locations:details' battle.location.pk %}" class="btn btn-outline-secondary">
+            ← Back to {{ battle.location }}
+        </a>
+    </div>
+
+</div>
+{% endblock %}
