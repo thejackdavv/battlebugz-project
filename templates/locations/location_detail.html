@@ -1,0 +1,95 @@
+{% extends 'common/base.html' %}
+{% block title %}{{ location.name }} – BattleBugz{% endblock %}
+{% block content %}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <a href="{% url 'locations:list' %}" class="btn btn-outline-secondary btn-sm">← Back to locations</a>
+        <div class="d-flex gap-2">
+            <a href="{% url 'locations:edit' location.pk %}" class="btn btn-sm btn-outline-primary">✏️ Edit</a>
+            <a href="{% url 'locations:delete' location.pk %}" class="btn btn-sm btn-outline-danger">🗑 Delete</a>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        {# ── Image ──────────────────────────────────────────────── #}
+        <div class="col-md-4 text-center">
+            <img src="{{ location.image_url }}" class="img-fluid rounded shadow"
+                 style="max-height: 320px; object-fit: contain;" alt="{{ location.name }}">
+        </div>
+
+        {# ── Info ───────────────────────────────────────────────── #}
+        <div class="col-md-8">
+            <div class="d-flex align-items-center gap-2 mb-2">
+                <h2 class="mb-0">{{ location.name }}</h2>
+                <span class="badge
+                    {% if location.type == 'FIRE' %}bg-danger
+                    {% elif location.type == 'WATER' %}bg-primary
+                    {% elif location.type == 'EARTH' %}bg-warning text-dark
+                    {% elif location.type == 'GRASS' %}bg-success
+                    {% endif %}">
+                    {{ location.get_type_display }}
+                </span>
+            </div>
+
+            <p class="mb-4">{{ location.description|capfirst }}</p>
+
+            {# ── Resident bugs ──────────────────────────────────── #}
+            <h5>🐛 Resident Bugs</h5>
+            {% with bugs=location.bugs.all %}
+            {% if bugs %}
+                <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-2 mb-4">
+                    {% for bug in bugs %}
+                    <div class="col">
+                        <a href="{% url 'bugs:details' bug.pk %}" class="text-decoration-none">
+                            <div class="card h-100 text-center p-2 {% if bug.is_active %}border-success{% endif %}">
+                                <img src="{{ bug.image_url }}" class="mx-auto mb-1 object-fit-contain"
+                                     style="height: 60px;" alt="{{ bug.name }}">
+                                <small class="fw-semibold text-dark">{{ bug.name }}</small>
+                                <small class="badge mt-1
+                                    {% if bug.type == 'FIRE' %}bg-danger
+                                    {% elif bug.type == 'WATER' %}bg-primary
+                                    {% elif bug.type == 'EARTH' %}bg-warning text-dark
+                                    {% elif bug.type == 'GRASS' %}bg-success
+                                    {% endif %}">
+                                    {{ bug.get_type_display }}
+                                </small>
+                            </div>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-muted fst-italic mb-4">No bugs live here.</p>
+            {% endif %}
+            {% endwith %}
+
+            {# ── Available foods ────────────────────────────────── #}
+            <h5>🍎 Available Foods</h5>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="text-muted small">Foods found at this location</span>
+                <a href="{% url 'locations:food-create' location.pk %}" class="btn btn-sm btn-outline-success">+ Add Food</a>
+            </div>
+            {% with foods=location.foods.all %}
+            {% if foods %}
+                <ul class="list-group list-group-flush">
+                    {% for food in foods %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                        <span>{{ food.name }}</span>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge bg-secondary">+{{ food.increase_amount }} {{ food.get_stat_display }}</span>
+                            <a href="{% url 'locations:food-delete' location.pk food.pk %}"
+                               class="btn btn-sm btn-outline-danger py-0">🗑</a>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-muted fst-italic">No food available here.</p>
+            {% endif %}
+            {% endwith %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
