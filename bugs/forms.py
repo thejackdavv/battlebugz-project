@@ -44,6 +44,7 @@ class BugCreateForm(forms.ModelForm):
             raise forms.ValidationError(
                 f"Total points allocated must be exactly {ALLOCATION_POINTS}. Currently allocated: {total}."
             )
+        return cleaned_data
 
     def save(self, commit = True):
         bug = super().save(commit=False)
