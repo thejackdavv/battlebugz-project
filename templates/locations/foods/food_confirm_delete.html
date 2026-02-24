@@ -3,26 +3,52 @@
 {% block title %}Delete {{ food.name }} – BattleBugz{% endblock %}
 
 {% block content %}
-<div class="container py-4" style="max-width: 480px;">
+<div class="container py-4" style="max-width: 520px;">
     <div class="card border-danger">
         <div class="card-header bg-danger text-white fw-semibold">
-            ⚠️ Confirm Deletion
+            ⚠️ Remove Food
         </div>
         <div class="card-body text-center py-4">
             <h5 class="mb-1">{{ food.name }}</h5>
-            <p class="text-muted mb-1">
+            <p class="text-muted mb-4">
                 Boosts <strong>{{ food.get_stat_display }}</strong> by <strong>+{{ food.increase_amount }}</strong>
             </p>
-            <p class="text-muted mb-4">
-                <strong>Are you sure you want to delete it?</strong>
-            </p>
-            <form method="post">
-                {% csrf_token %}
-                <div class="d-flex justify-content-center gap-3">
-                    <button type="submit" class="btn btn-danger px-4">Yes, delete</button>
-                    <a href="{% url 'locations:details' location.pk %}" class="btn btn-outline-secondary px-4">Cancel</a>
+
+            <div class="row g-3">
+                {# Option 1: remove from this location only #}
+                <div class="col-12">
+                    <div class="card border-warning h-100">
+                        <div class="card-body">
+                            <h6 class="card-title">Remove from {{ location.name }}</h6>
+                            <p class="card-text text-muted small">
+                                The food still exists and may appear in other locations.
+                            </p>
+                            <form method="post" action="{% url 'locations:food-remove' location.pk food.pk %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-warning w-100">Remove from this location</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-            </form>
+
+                {# Option 2: delete entirely #}
+                <div class="col-12">
+                    <div class="card border-danger h-100">
+                        <div class="card-body">
+                            <h6 class="card-title">Delete permanently</h6>
+                            <p class="card-text text-muted small">
+                                The food will be deleted from the entire game, including all other locations.
+                            </p>
+                            <form method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger w-100">Delete permanently</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <a href="{% url 'locations:details' location.pk %}" class="btn btn-outline-secondary w-100 mt-3">Cancel</a>
         </div>
     </div>
 </div>

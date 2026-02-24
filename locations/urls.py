@@ -1,13 +1,16 @@
 from django.urls import path, include
 
 from locations.views import LocationListView, LocationDetailView, LocationCreateView, LocationEditView, \
-    LocationDeleteView, FoodCreateView, FoodDeleteView
+    LocationDeleteView, FoodCreateView, FoodDeleteView, FoodRemoveFromLocationView
 
 app_name = 'locations'
 
 foodpatterns = [
     path('create/', FoodCreateView.as_view(), name='food-create'),
-    path('<int:food_pk>/delete/', FoodDeleteView.as_view(), name='food-delete'),
+    path('<int:food_pk>/', include([
+        path('delete/', FoodDeleteView.as_view(), name='food-delete'),
+        path('remove/', FoodRemoveFromLocationView.as_view(), name='food-remove'),
+    ])),
 ]
 urlpatterns = [
     path('', LocationListView.as_view(), name='list'),

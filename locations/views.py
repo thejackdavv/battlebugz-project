@@ -1,5 +1,6 @@
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from common.mixins import CombinedMixin
@@ -79,3 +80,10 @@ class FoodDeleteView(DeleteView):
     def get_success_url(self):
         return reverse_lazy('locations:details', kwargs={'pk': self.kwargs['pk']})
 
+
+class FoodRemoveFromLocationView(View):
+    def post(self, request, pk, food_pk):
+        location = get_object_or_404(Location, pk=pk)
+        food = get_object_or_404(Food, pk=food_pk)
+        food.location.remove(location)
+        return redirect('locations:details', pk=pk)
