@@ -11,6 +11,14 @@
         </div>
     </div>
 
+    {# ── Messages ───────────────────────────────────────────── #}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endfor %}
+
     <div class="row g-4">
         {# ── Image ──────────────────────────────────────────────── #}
         <div class="col-md-4 text-center">
@@ -33,6 +41,31 @@
             </div>
 
             <p class="mb-4">{{ location.description|capfirst }}</p>
+
+            {# ── Forage ─────────────────────────────────────────── #}
+            <div class="card mb-4
+                {% if location.type == 'FIRE' %}border-danger
+                {% elif location.type == 'WATER' %}border-primary
+                {% elif location.type == 'EARTH' %}border-warning
+                {% elif location.type == 'GRASS' %}border-success
+                {% endif %}">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="mb-1">🌿 Forage here</h6>
+                        {% if active_bug %}
+                            <small class="text-muted">Foraging as <strong>{{ active_bug.name }}</strong></small>
+                        {% else %}
+                            <small class="text-danger">No active bug — <a href="{% url 'bugs:list' %}">activate one</a> first.</small>
+                        {% endif %}
+                    </div>
+                    <form method="post" action="{% url 'locations:forage' location.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-success" {% if not active_bug %}disabled{% endif %}>
+                            Forage
+                        </button>
+                    </form>
+                </div>
+            </div>
 
             {# ── Resident bugs ──────────────────────────────────── #}
             <h5>🐛 Resident Bugs</h5>

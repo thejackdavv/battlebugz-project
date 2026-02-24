@@ -1,7 +1,7 @@
 from django.urls import path, include
 
 from locations.views import LocationListView, LocationDetailView, LocationCreateView, LocationEditView, \
-    LocationDeleteView, FoodCreateView, FoodDeleteView, FoodRemoveFromLocationView
+    LocationDeleteView, FoodCreateView, FoodDeleteView, FoodRemoveFromLocationView, forage_view
 
 app_name = 'locations'
 
@@ -19,6 +19,7 @@ urlpatterns = [
             path('edit/', LocationEditView.as_view(), name='edit'),
             path('delete/', LocationDeleteView.as_view(), name='delete'),
             path('foods/', include(foodpatterns)),
+            path('forage/', forage_view, name='forage'),
     ])),
     path('create/', LocationCreateView.as_view(), name='create'),
 ]
