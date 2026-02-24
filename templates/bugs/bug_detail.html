@@ -34,7 +34,7 @@
             <p class="text-muted mb-3">📍 {{ bug.natural_habitat|default:'No habitat' }}</p>
 
 
-            <p class="mb-4">{{ bug.description }}</p>
+            <p class="mb-4">{{ bug.description|capfirst }}</p>
 
             <h5>Stats</h5>
             <ul class="list-group list-group-flush mb-3">
