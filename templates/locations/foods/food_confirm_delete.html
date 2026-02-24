@@ -14,7 +14,7 @@
                 Boosts <strong>{{ food.get_stat_display }}</strong> by <strong>+{{ food.increase_amount }}</strong>
             </p>
             <p class="text-muted mb-4">
-                Remove this food from <strong>{{ location.name }}</strong>?
+                <strong>Are you sure you want to delete it?</strong>
             </p>
             <form method="post">
                 {% csrf_token %}
