@@ -26,6 +26,22 @@
         </div>
     </div>
 
+    {# ── Active bug ───────────────────────────────────────── #}
+    {% if active_bug %}
+    <div class="mb-5">
+        <h5 class="mb-3 text-center">🟢 Your Active Bug</h5>
+        <div class="row justify-content-center">
+            <div class="col-12 col-sm-8 col-md-5 col-lg-4">
+                {% include 'common/bug_card.html' with bug=active_bug %}
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="alert alert-warning text-center mb-5">
+        No active bug selected. <a href="{% url 'bugs:list' %}">Pick one</a> to start exploring!
+    </div>
+    {% endif %}
+
     {# ── Spotlight row ────────────────────────────────────── #}
     <div class="row g-4 justify-content-center">
 

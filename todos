@@ -1,8 +1,4 @@
-1. common/templatetags - fix -------done
-2. add bug form, view, template -----done
-3. bug edit/delete forms, views, templates (buttons in bug_details.html) -----done
-4. same for locations ,search bar, pagination  ---done
-4.5 and foods (search bar and pagination food_list.html)
+
 5. battle logic, battle catalog and search bar
 6. homepage (top bugs, top locations, active bug,)
 7. custom data migration
