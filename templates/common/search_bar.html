@@ -1,0 +1,14 @@
+{% load query_keeper_tag %}
+<form method="get" class="d-flex" role="search">
+    <input
+        type="search"
+        name="q"
+        class="form-control me-2"
+        placeholder="Search by name or type…"
+        value="{{ request.GET.q }}"
+    >
+    {% if request.GET.per_page %}
+        <input type="hidden" name="per_page" value="{{ request.GET.per_page }}">
+    {% endif %}
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>

@@ -1,0 +1,59 @@
+{% load query_keeper_tag %}
+{% if is_paginated %}
+<div class="d-flex flex-column flex-sm-row align-items-center justify-content-between gap-3 mt-4">
+
+    {# --- Per-page selector --- #}
+    <div class="d-flex align-items-center gap-2">
+        <span class="text-muted small">Per page:</span>
+        {% for n in per_page_choices %}
+        <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}per_page={{ n }}"
+           class="btn btn-sm {% if request.GET.per_page == n|stringformat:'s' or not request.GET.per_page and n == paginate_by %}btn-secondary{% else %}btn-outline-secondary{% endif %}">
+            {{ n }}
+        </a>
+        {% endfor %}
+    </div>
+
+    {# --- Page navigation --- #}
+    <nav aria-label="Page navigation">
+        <ul class="pagination pagination-sm mb-0">
+            {# Previous #}
+            <li class="page-item {% if not page_obj.has_previous %}disabled{% endif %}">
+                <a class="page-link"
+                   {% if page_obj.has_previous %}href="{% query_keeper 'page' page_obj.previous_page_number %}"{% else %}href="#"{% endif %}
+                   aria-label="Previous">
+                    &laquo;
+                </a>
+            </li>
+
+            {# Page numbers (show a window around the current page) #}
+            {% for num in paginator.page_range %}
+                {% if num == page_obj.number %}
+                    <li class="page-item active" aria-current="page">
+                        <span class="page-link">{{ num }}</span>
+                    </li>
+                {% elif num >= page_obj.number|add:"-2" and num <= page_obj.number|add:"2" %}
+                    <li class="page-item">
+                        <a class="page-link" href="{% query_keeper 'page' num %}">{{ num }}</a>
+                    </li>
+                {% elif num == 1 or num == paginator.num_pages %}
+                    <li class="page-item">
+                        <a class="page-link" href="{% query_keeper 'page' num %}">{{ num }}</a>
+                    </li>
+                {% elif num == page_obj.number|add:"-3" or num == page_obj.number|add:"3" %}
+                    <li class="page-item disabled"><span class="page-link">…</span></li>
+                {% endif %}
+            {% endfor %}
+
+            {# Next #}
+            <li class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
+                <a class="page-link"
+                   {% if page_obj.has_next %}href="{% query_keeper 'page' page_obj.next_page_number %}"{% else %}href="#"{% endif %}
+                   aria-label="Next">
+                    &raquo;
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+</div>
+{% endif %}

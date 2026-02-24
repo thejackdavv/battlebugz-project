@@ -1,0 +1,168 @@
+
+{% extends 'common/base.html' %}
+
+{% block title %}Create New Bug – BattleBugz{% endblock %}
+
+{% block content %}
+<div class="container py-4" style="max-width: 760px;">
+    <div class="d-flex align-items-center gap-3 mb-4">
+        <a href="{% url 'bugs:list' %}" class="btn btn-outline-secondary btn-sm">← Back</a>
+        <h2 class="mb-0">Create New Bug</h2>
+    </div>
+
+    <form method="post" novalidate>
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+            </div>
+        {% endif %}
+
+        {# ── Basic Info ────────────────────────────────────────── #}
+        <div class="card mb-4">
+            <div class="card-header fw-semibold">Basic Info</div>
+            <div class="card-body row g-3">
+
+                <div class="col-md-6">
+                    <label for="{{ form.name.id_for_label }}" class="form-label">Name</label>
+                    <input type="text" name="{{ form.name.html_name }}"
+                           id="{{ form.name.id_for_label }}"
+                           class="form-control {% if form.name.errors %}is-invalid{% endif %}"
+                           value="{{ form.name.value|default:'' }}">
+                    {% for e in form.name.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+                </div>
+
+                <div class="col-md-6">
+                    <label for="{{ form.type.id_for_label }}" class="form-label">Type</label>
+                    <select name="{{ form.type.html_name }}"
+                            id="{{ form.type.id_for_label }}"
+                            class="form-select {% if form.type.errors %}is-invalid{% endif %}">
+                        <option value="">— choose —</option>
+                        {% for val, label in form.type.field.choices %}
+                            {% if val %}
+                                <option value="{{ val }}" {% if form.type.value == val %}selected{% endif %}>{{ label }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                    {% for e in form.type.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+                </div>
+
+                <div class="col-md-6">
+                    <label for="{{ form.natural_habitat.id_for_label }}" class="form-label">Natural Habitat</label>
+                    <select name="{{ form.natural_habitat.html_name }}"
+                            id="{{ form.natural_habitat.id_for_label }}"
+                            class="form-select {% if form.natural_habitat.errors %}is-invalid{% endif %}">
+                        <option value="">— none —</option>
+                        {% for val, label in form.natural_habitat.field.choices %}
+                            {% if val %}
+                                <option value="{{ val }}" {% if form.natural_habitat.value|stringformat:'s' == val|stringformat:'s' %}selected{% endif %}>{{ label }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                    {% for e in form.natural_habitat.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+                </div>
+
+                <div class="col-md-6">
+                    <label for="{{ form.image_url.id_for_label }}" class="form-label">Image URL</label>
+                    <input type="url" name="{{ form.image_url.html_name }}"
+                           id="{{ form.image_url.id_for_label }}"
+                           class="form-control {% if form.image_url.errors %}is-invalid{% endif %}"
+                           value="{{ form.image_url.value|default:'' }}">
+                    {% for e in form.image_url.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+                </div>
+
+                <div class="col-12">
+                    <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
+                    <textarea name="{{ form.description.html_name }}"
+                              id="{{ form.description.id_for_label }}"
+                              rows="3"
+                              class="form-control {% if form.description.errors %}is-invalid{% endif %}">{{ form.description.value|default:'' }}</textarea>
+                    {% for e in form.description.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+                </div>
+
+            </div>
+        </div>
+
+        {# ── Stat Allocation ────────────────────────────────────── #}
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center fw-semibold">
+                <span>Stat Allocation</span>
+                <span class="text-muted fw-normal small">
+                    Points remaining: <strong id="points-remaining">10</strong> / 10
+                </span>
+            </div>
+            <div class="card-body">
+                <p class="text-muted small mb-3">
+                    Distribute exactly <strong>10</strong> points across the stats below (0–5 each).
+                    Base values are shown in brackets.
+                </p>
+
+                <div class="row g-3">
+                    {% with fields=form %}
+                    <div class="col-sm-6 col-lg-4">
+                        <label for="{{ form.hp_points.id_for_label }}" class="form-label">❤️ HP <span class="text-muted">(base 20)</span></label>
+                        <input type="number" name="{{ form.hp_points.html_name }}" id="{{ form.hp_points.id_for_label }}"
+                               class="form-control stat-input {% if form.hp_points.errors %}is-invalid{% endif %}"
+                               value="{{ form.hp_points.value|default:0 }}" min="0" max="5">
+                        {% for e in form.hp_points.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+                    </div>
+                    <div class="col-sm-6 col-lg-4">
+                        <label for="{{ form.armor_points.id_for_label }}" class="form-label">🛡️ Armor <span class="text-muted">(base 3)</span></label>
+                        <input type="number" name="{{ form.armor_points.html_name }}" id="{{ form.armor_points.id_for_label }}"
+                               class="form-control stat-input {% if form.armor_points.errors %}is-invalid{% endif %}"
+                               value="{{ form.armor_points.value|default:0 }}" min="0" max="5">
+                        {% for e in form.armor_points.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+                    </div>
+                    <div class="col-sm-6 col-lg-4">
+                        <label for="{{ form.strength_points.id_for_label }}" class="form-label">⚔️ Strength <span class="text-muted">(base 3)</span></label>
+                        <input type="number" name="{{ form.strength_points.html_name }}" id="{{ form.strength_points.id_for_label }}"
+                               class="form-control stat-input {% if form.strength_points.errors %}is-invalid{% endif %}"
+                               value="{{ form.strength_points.value|default:0 }}" min="0" max="5">
+                        {% for e in form.strength_points.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+                    </div>
+                    <div class="col-sm-6 col-lg-4">
+                        <label for="{{ form.mobility_points.id_for_label }}" class="form-label">💨 Mobility <span class="text-muted">(base 3)</span></label>
+                        <input type="number" name="{{ form.mobility_points.html_name }}" id="{{ form.mobility_points.id_for_label }}"
+                               class="form-control stat-input {% if form.mobility_points.errors %}is-invalid{% endif %}"
+                               value="{{ form.mobility_points.value|default:0 }}" min="0" max="5">
+                        {% for e in form.mobility_points.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+                    </div>
+                    <div class="col-sm-6 col-lg-4">
+                        <label for="{{ form.healing_factor_points.id_for_label }}" class="form-label">💚 Healing <span class="text-muted">(base 3)</span></label>
+                        <input type="number" name="{{ form.healing_factor_points.html_name }}" id="{{ form.healing_factor_points.id_for_label }}"
+                               class="form-control stat-input {% if form.healing_factor_points.errors %}is-invalid{% endif %}"
+                               value="{{ form.healing_factor_points.value|default:0 }}" min="0" max="5">
+                        {% for e in form.healing_factor_points.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+                    </div>
+                    {% endwith %}
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-success px-4">Create Bug</button>
+            <a href="{% url 'bugs:list' %}" class="btn btn-outline-secondary">Cancel</a>
+        </div>
+
+    </form>
+</div>
+
+<script>
+    const inputs = document.querySelectorAll('.stat-input');
+    const display = document.getElementById('points-remaining');
+    const total = 10;
+
+    function updateRemaining() {
+        let used = 0;
+        inputs.forEach(i => used += parseInt(i.value) || 0);
+        const remaining = total - used;
+        display.textContent = remaining;
+        display.closest('strong') ? null : null;
+        display.className = remaining < 0 ? 'text-danger' : remaining === 0 ? 'text-success' : '';
+    }
+
+    inputs.forEach(i => i.addEventListener('input', updateRemaining));
+    updateRemaining();
+</script>
+{% endblock %}

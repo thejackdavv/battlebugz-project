@@ -1,9 +1,8 @@
 {% load static %}
-{% load count_bugs_tag %}
 <footer class="bg-dark text-white py-2 mt-auto">
     <div class="container-fluid d-flex align-items-center justify-content-between">
         <p class="mb-0">&copy; {% now "Y" %} BattleBugz. All rights reserved.</p>
         <img src="{% static 'images/footer-image.png' %}" alt="Footer" height="40">
-        <p class="mb-0">Total bugs in the system: {% count_bugs %}</p>
+        <p class="mb-0">Total bugs in the system: {{ bugs_count }} </p>
     </div>
 </footer>
