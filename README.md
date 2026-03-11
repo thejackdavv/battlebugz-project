@@ -152,7 +152,7 @@ CREATE DATABASE battlebugz;
 
 ### 6. Run migrations
 
-This will create all tables **and** load the example data in one step:
+This will create all tables 
 
 ```bash
 python manage.py migrate
@@ -172,8 +172,16 @@ python manage.py runserver
 
 Open [http://127.0.0.1:8000](http://127.0.0.1:8000) in your browser.
 
----
 
+
+### 9. (Optional) Load example data
+```bash
+python manage.py loaddata initial_data
+```
+
+This will replace all previously created records with a set of example bugs, locations, foods, and battles to explore.
+
+---
 ## Environment Variables
 
 All secrets and config live in a `.env` file (never committed). Use `.env.template` as a starting point:
@@ -198,7 +206,7 @@ python -c "from django.core.management.utils import get_random_secret_key; print
 
 ## Example Data
 
-Running `python manage.py migrate` automatically seeds the database with example data via `common/migrations/0001_seed_example_data.py`:
+Running `python manage.py loaddata initial_data` automatically seeds the database with example data via `common/fixtures/initial_data.json`:
 
 **5 Locations** — Hellish Volcano, Mirror Lake, Secret Cave, Wide Pastures, Murkwood
 
@@ -211,7 +219,7 @@ Running `python manage.py migrate` automatically seeds the database with example
 To undo the seed data:
 
 ```bash
-python manage.py migrate common zero
+python manage.py flush
 ```
 
 ---
@@ -257,7 +265,15 @@ Each new bug gets **10 points** to distribute across 5 stats (0–5 per stat):
 | `mobility`       | Increases dodge chance (`mobility / (mobility + 100)`) |
 | `healing_factor` | Regenerates `healing_factor × 0.5` HP after surviving a hit |
 
-Base stats of **20 / 5 / 5 / 5 / 5** are applied before your allocation, so every bug starts viable.
+Base stats of **20 / 3 / 3 / 3 / 3** are applied before your allocation, so every bug starts viable.  
+Selecting a natural habitat (location) gives a small boost to one stat based on the location type:  
+
+| Location Type | Stat Boost        |
+|---------------|-------------------|
+| Fire          | +2 Strength       |
+| Water         | +2 Mobility       |
+| Earth         | +2 Armor          |
+| Grass         | +2 Healing Factor |  
 
 ### Battle Formula
 
