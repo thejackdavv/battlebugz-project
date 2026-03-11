@@ -152,7 +152,7 @@ CREATE DATABASE battlebugz;
 
 ### 6. Run migrations
 
-This will create all tables 
+This will apply all database migrations to create or update the required tables; it does not load any example data.
 
 ```bash
 python manage.py migrate
@@ -179,7 +179,9 @@ Open [http://127.0.0.1:8000](http://127.0.0.1:8000) in your browser.
 python manage.py loaddata initial_data
 ```
 
-This will replace all previously created records with a set of example bugs, locations, foods, and battles to explore.
+This will load a set of example bugs, locations, foods, and battles into your database. 
+For a completely clean slate, run it on a fresh database (or after `python manage.py flush`) 
+so that existing records or unique constraints don't conflict with the fixture data.
 
 ---
 ## Environment Variables
@@ -221,6 +223,7 @@ To undo the seed data:
 ```bash
 python manage.py flush
 ```
+Warning! This will delete all data in the database and reset it to a clean state. Use with caution.
 
 ---
 
@@ -266,14 +269,14 @@ Each new bug gets **10 points** to distribute across 5 stats (0–5 per stat):
 | `healing_factor`    | Regenerates `healing_factor × 0.5` HP after surviving a hit |
 
 Base stats of **20 / 3 / 3 / 3 / 3** are applied before your allocation, so every bug starts viable.  
-Selecting a natural habitat (location) gives a small boost to one stat based on the location type:  
+Each bug's elemental type gives it a small boost to one stat:  
 
-| Location Type | Stat Boost        |
-|---------------|-------------------|
-| Fire          | +2 Strength       |
-| Water         | +2 Mobility       |
-| Earth         | +2 Armor          |
-| Grass         | +2 Healing Factor |  
+| Bug Type | Stat Boost        |
+|----------|-------------------|
+| Fire     | +2 Strength       |
+| Water    | +2 Mobility       |
+| Earth    | +2 Armor          |
+| Grass    | +2 Healing Factor |  
 
 ### Battle Formula
 
