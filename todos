@@ -1,0 +1,7 @@
+1. deleting a location with battles attached to it results in protected error - soft delete perhaps?
+2. deleting a bug with battles - error again - soft delete?
+3. unable to edit bug in edit form - check: view, form, template, etc
+4. removing a food from a location makes it unusable in other locations
+4.5 when creating food at a location, user should be able to select from existing foods or create a new one - currently creates a new one every time
+5. battles: search, pagination, etc
+6.further testing
