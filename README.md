@@ -92,12 +92,12 @@ BattleBugz/
 
 ## Tech Stack
 
-| Layer       | Technology                        |
-|-------------|-----------------------------------|
-| Backend     | Python 3.12, Django 6.0           |
-| Database    | PostgreSQL (`psycopg2-binary`)     |
-| Frontend    | Bootstrap 5.3 (CDN)               |
-| Config      | `python-decouple` + `.env` file   |
+| Layer    | Technology                      |
+|----------|---------------------------------|
+| Backend  | Python 3.12, Django 6.0         |
+| Database | PostgreSQL (`psycopg2-binary`)  |
+| Frontend | Bootstrap 5.3 (CDN)             |
+| Config   | `python-decouple` + `.env` file |
 
 ---
 
@@ -152,7 +152,7 @@ CREATE DATABASE battlebugz;
 
 ### 6. Run migrations
 
-This will create all tables **and** load the example data in one step:
+This will apply all database migrations to create or update the required tables; it does not load any example data.
 
 ```bash
 python manage.py migrate
@@ -172,21 +172,31 @@ python manage.py runserver
 
 Open [http://127.0.0.1:8000](http://127.0.0.1:8000) in your browser.
 
----
 
+
+### 9. (Optional) Load example data
+```bash
+python manage.py loaddata initial_data
+```
+
+This will load a set of example bugs, locations, foods, and battles into your database. 
+For a completely clean slate, run it on a fresh database (or after `python manage.py flush`) 
+so that existing records or unique constraints don't conflict with the fixture data.
+
+---
 ## Environment Variables
 
 All secrets and config live in a `.env` file (never committed). Use `.env.template` as a starting point:
 
-| Variable      | Description                                      | Example            |
-|---------------|--------------------------------------------------|--------------------|
-| `SECRET_KEY`  | Django secret key (generate one below)           | `django-insecure-…`|
-| `DEBUG`       | Enable debug mode (`True` in dev, `False` in prod) | `True`           |
-| `DB_NAME`     | PostgreSQL database name                         | `battlebugz`       |
-| `DB_USER`     | PostgreSQL username                              | `postgres`         |
-| `DB_PASSWORD` | PostgreSQL password                              | `yourpassword`     |
-| `DB_HOST`     | Database host                                    | `localhost`        |
-| `DB_PORT`     | Database port                                    | `5432`             |
+| Variable      | Description                                        | Example             |
+|---------------|----------------------------------------------------|---------------------|
+| `SECRET_KEY`  | Django secret key (generate one below)             | `django-insecure-…` |
+| `DEBUG`       | Enable debug mode (`True` in dev, `False` in prod) | `True`              |
+| `DB_NAME`     | PostgreSQL database name                           | `battlebugz`        |
+| `DB_USER`     | PostgreSQL username                                | `postgres`          |
+| `DB_PASSWORD` | PostgreSQL password                                | `yourpassword`      |
+| `DB_HOST`     | Database host                                      | `localhost`         |
+| `DB_PORT`     | Database port                                      | `5432`              |
 
 **Generate a secret key:**
 
@@ -198,7 +208,7 @@ python -c "from django.core.management.utils import get_random_secret_key; print
 
 ## Example Data
 
-Running `python manage.py migrate` automatically seeds the database with example data via `common/migrations/0001_seed_example_data.py`:
+Running `python manage.py loaddata initial_data` automatically seeds the database with example data via `common/fixtures/initial_data.json`:
 
 **5 Locations** — Hellish Volcano, Mirror Lake, Secret Cave, Wide Pastures, Murkwood
 
@@ -211,35 +221,36 @@ Running `python manage.py migrate` automatically seeds the database with example
 To undo the seed data:
 
 ```bash
-python manage.py migrate common zero
+python manage.py flush
 ```
+Warning! This will delete all data in the database and reset it to a clean state. Use with caution.
 
 ---
 
 ## URL Reference
 
-| URL Pattern                              | Page                         |
-|------------------------------------------|------------------------------|
-| `/`                                      | Homepage                     |
-| `/bugs/`                                 | Bug list                     |
-| `/bugs/create/`                          | Create a new bug             |
-| `/bugs/<pk>/`                            | Bug detail                   |
-| `/bugs/<pk>/edit/`                       | Edit bug                     |
-| `/bugs/<pk>/delete/`                     | Delete bug                   |
-| `/bugs/<pk>/change-active/`              | Activate bug                 |
-| `/locations/`                            | Location list                |
-| `/locations/create/`                     | Create a location            |
-| `/locations/<pk>/`                       | Location detail + forage     |
-| `/locations/<pk>/edit/`                  | Edit location                |
-| `/locations/<pk>/delete/`               | Delete location              |
-| `/locations/<pk>/foods/create/`          | Add food to location         |
-| `/locations/<pk>/foods/<food_pk>/delete/`| Delete food permanently      |
-| `/locations/<pk>/foods/<food_pk>/remove/`| Remove food from location    |
-| `/locations/<pk>/forage/`               | Forage action (POST)         |
-| `/battles/`                              | Battle history               |
-| `/battles/<pk>/`                         | Battle detail / round log    |
-| `/battles/start/<location_pk>/`          | Start a battle (POST)        |
-| `/admin/`                                | Django admin panel           |
+| URL Pattern                               | Page                      |
+|-------------------------------------------|---------------------------|
+| `/`                                       | Homepage                  |
+| `/bugs/`                                  | Bug list                  |
+| `/bugs/create/`                           | Create a new bug          |
+| `/bugs/<pk>/`                             | Bug detail                |
+| `/bugs/<pk>/edit/`                        | Edit bug                  |
+| `/bugs/<pk>/delete/`                      | Delete bug                |
+| `/bugs/<pk>/change-active/`               | Activate bug              |
+| `/locations/`                             | Location list             |
+| `/locations/create/`                      | Create a location         |
+| `/locations/<pk>/`                        | Location detail + forage  |
+| `/locations/<pk>/edit/`                   | Edit location             |
+| `/locations/<pk>/delete/`                 | Delete location           |
+| `/locations/<pk>/foods/create/`           | Add food to location      |
+| `/locations/<pk>/foods/<food_pk>/delete/` | Delete food permanently   |
+| `/locations/<pk>/foods/<food_pk>/remove/` | Remove food from location |
+| `/locations/<pk>/forage/`                 | Forage action (POST)      |
+| `/battles/`                               | Battle history            |
+| `/battles/<pk>/`                          | Battle detail / round log |
+| `/battles/start/<location_pk>/`           | Start a battle (POST)     |
+| `/admin/`                                 | Django admin panel        |
 
 ---
 
@@ -249,15 +260,23 @@ python manage.py migrate common zero
 
 Each new bug gets **10 points** to distribute across 5 stats (0–5 per stat):
 
-| Stat             | Effect                                              |
-|------------------|-----------------------------------------------------|
-| `max_health_points` | Total HP pool                                  |
-| `armor`          | Reduces incoming damage each hit                    |
-| `strength`       | Raw attack damage per round                         |
-| `mobility`       | Increases dodge chance (`mobility / (mobility + 100)`) |
-| `healing_factor` | Regenerates `healing_factor × 0.5` HP after surviving a hit |
+| Stat                | Effect                                                      |
+|---------------------|-------------------------------------------------------------|
+| `max_health_points` | Total HP pool                                               |
+| `armor`             | Reduces incoming damage each hit                            |
+| `strength`          | Raw attack damage per round                                 |
+| `mobility`          | Increases dodge chance (`mobility / (mobility + 100)`)      |
+| `healing_factor`    | Regenerates `healing_factor × 0.5` HP after surviving a hit |
 
-Base stats of **20 / 5 / 5 / 5 / 5** are applied before your allocation, so every bug starts viable.
+Base stats of **20 / 3 / 3 / 3 / 3** are applied before your allocation, so every bug starts viable.  
+Each bug's elemental type gives it a small boost to one stat:  
+
+| Bug Type | Stat Boost        |
+|----------|-------------------|
+| Fire     | +2 Strength       |
+| Water    | +2 Mobility       |
+| Earth    | +2 Armor          |
+| Grass    | +2 Healing Factor |  
 
 ### Battle Formula
 
