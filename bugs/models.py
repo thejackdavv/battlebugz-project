@@ -1,8 +1,11 @@
 from django.db import models
 
+from common.models import SoftDeleteModel
+
+
 # Create your models here.
 
-class Bug(models.Model):
+class Bug(SoftDeleteModel):
     class BugTypeChoices(models.TextChoices):
         FIRE = 'FIRE', 'Fire'
         WATER = 'WATER', 'Water'
