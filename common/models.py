@@ -31,5 +31,9 @@ class SoftDeleteModel(models.Model):
     def hard_delete(self):
         super().delete()
 
+    def restore(self):
+        self.deleted_at = None
+        self.save()
+
     class Meta:
         abstract = True

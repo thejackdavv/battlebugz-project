@@ -11,3 +11,4 @@ class SoftDeleteQuerySet(models.QuerySet):
         return self.filter(deleted_at__isnull=True)
     def deleted(self):
         return self.filter(deleted_at__isnull=False)
+
