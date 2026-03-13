@@ -66,7 +66,8 @@ class FoodCreateForm(FoodBaseForm):
 class FoodAddForm(forms.Form):
     food = forms.ModelChoiceField(queryset=Food.objects.none())
 
-    def __init__(self, location, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
+        location = kwargs.pop('location')
         super().__init__(*args, **kwargs)
 
         self.fields['food'].queryset = Food.objects.exclude(location=location)

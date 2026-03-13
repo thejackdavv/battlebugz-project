@@ -98,8 +98,6 @@ class FoodAddView(FormView):
         context['location'] = self.location
         return context
 
-    def get_success_url(self):
-        return reverse_lazy('locations:details', kwargs={'pk': self.location.pk})
 
 class FoodDeleteView(DeleteView):
     model = Food
