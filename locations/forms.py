@@ -6,7 +6,7 @@ from locations.models import Location, Food
 class LocationBaseForm(forms.ModelForm):
     class Meta:
         model = Location
-        fields = '__all__'
+        exclude = ['deleted_at']
         error_messages = {
             'name': {
                 'required' : 'How would you visit a place without a name?'

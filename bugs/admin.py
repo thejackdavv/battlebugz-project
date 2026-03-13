@@ -7,4 +7,5 @@ from bugs.models import Bug
 
 @admin.register(Bug)
 class BugAdmin(admin.ModelAdmin):
-    ...
+    def get_queryset(self, request):
+        return Bug.all_objects.all()
