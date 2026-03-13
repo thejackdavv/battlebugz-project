@@ -59,7 +59,7 @@ class Bug(SoftDeleteModel):
 
     def save(self, *args, **kwargs):
         if self.is_active:
-            Bug.objects.filter(is_active=True).exclude(pk=self.pk).update(is_active=False)
+            Bug.all_objects.filter(is_active=True).exclude(pk=self.pk).update(is_active=False)
         super().save(*args, **kwargs)
 
     @property
