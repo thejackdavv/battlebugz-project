@@ -68,6 +68,11 @@ class BugCreateForm(forms.ModelForm):
 
 class BugEditForm(forms.ModelForm):
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['type'].disabled = True
+        self.fields['natural_habitat'].disabled = True
+
     class Meta:
         model = Bug
         fields = (
@@ -77,11 +82,6 @@ class BugEditForm(forms.ModelForm):
             'image_url',
             'description',
         )
-
-        widgets = {
-            'type': forms.Select(attrs={'readonly':True, 'disabled':True}),
-            'natural_habitat': forms.Select(attrs={'readonly':True, 'disabled':True}),
-        }
 
 
 class BugSearchForm(forms.Form):

@@ -59,8 +59,16 @@ class Bug(SoftDeleteModel):
 
     def save(self, *args, **kwargs):
         if self.is_active:
-            Bug.objects.filter(is_active=True).exclude(pk=self.pk).update(is_active=False)
+            Bug.objects.filter(
+                is_active=True,
+            ).exclude(pk=self.pk).update(is_active=False)
         super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        if self.is_active:
+            self.is_active = False
+            super().save(update_fields=['is_active'])
+        super().delete(*args, **kwargs)
 
     @property
     def total_power(self):
@@ -77,7 +85,10 @@ class Bug(SoftDeleteModel):
         constraints = [
             models.UniqueConstraint(
                 fields=['is_active'],
-                condition=models.Q(is_active=True),
+                condition=models.Q(
+                    is_active=True,
+                    deleted_at__isnull=True,
+                ),
                 name='only_one_active_bug',
             )
         ]
