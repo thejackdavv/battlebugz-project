@@ -2,12 +2,12 @@ from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, FormView
 
 from bugs.models import Bug
 from common.mixins import CombinedMixin
 from locations.forage_service import forage
-from locations.forms import LocationCreateForm, LocationEditForm, FoodCreateForm
+from locations.forms import LocationCreateForm, LocationEditForm, FoodCreateForm, FoodAddForm
 from locations.models import Location, Food
 
 
@@ -66,6 +66,32 @@ class FoodCreateView(CreateView):
         kwargs = super().get_form_kwargs()
         kwargs['location'] = self.location
         return kwargs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['location'] = self.location
+        return context
+
+    def get_success_url(self):
+        return reverse_lazy('locations:details', kwargs={'pk': self.location.pk})
+
+class FoodAddView(FormView):
+    form_class = FoodAddForm
+    template_name = 'locations/foods/food_add.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        self.location = get_object_or_404(Location, pk=kwargs['pk'])
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['location'] = self.location
+        return kwargs
+
+    def form_valid(self, form):
+        food = form.cleaned_data['food']
+        self.location.foods.add(food)
+        return redirect('locations:details', pk=self.location.pk)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
