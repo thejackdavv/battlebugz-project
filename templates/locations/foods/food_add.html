@@ -1,0 +1,51 @@
+{% extends 'common/base.html' %}
+
+{% block title %}Add Food at {{ location.name }} – BattleBugz{% endblock %}
+
+{% block content %}
+<div class="container py-4" style="max-width: 560px;">
+    <div class="d-flex align-items-center gap-3 mb-4">
+        <a href="{% url 'locations:details' location.pk %}" class="btn btn-outline-secondary btn-sm">← Back</a>
+        <h2 class="mb-0">Add Food
+            <span class="text-muted fw-normal fs-5">at {{ location.name }}</span>
+        </h2>
+    </div>
+
+    <form method="post" novalidate>
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="card">
+            <div class="card-body row g-3">
+                <div class="col-12">
+                    <label for="{{ form.food.id_for_label }}" class="form-label">Food</label>
+                    <select name="{{ form.food.html_name }}"
+                            id="{{ form.food.id_for_label }}"
+                            class="form-select {% if form.food.errors %}is-invalid{% endif %}">
+                        <option value="">— choose a food —</option>
+                        {% for food in form.food.field.queryset %}
+                            <option value="{{ food.pk }}" {% if form.food.value|stringformat:'s' == food.pk|stringformat:'s' %}selected{% endif %}>
+                                {{ food.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    {% for e in form.food.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+                    {% if not form.food.field.queryset %}
+                        <div class="form-text">All available foods are already added to this location.</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex gap-2 mt-3">
+            <button type="submit" class="btn btn-success px-4">Add Food</button>
+            <a href="{% url 'locations:details' location.pk %}" class="btn btn-outline-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

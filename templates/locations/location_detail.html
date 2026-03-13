@@ -137,7 +137,10 @@
             <h5>🍎 Available Foods</h5>
             <div class="d-flex justify-content-between align-items-center mb-2">
                 <span class="text-muted small">Foods found at this location</span>
-                <a href="{% url 'locations:food-create' location.pk %}" class="btn btn-sm btn-outline-success">+ Add Food</a>
+                <span>
+                <a href="{% url 'locations:food-create' location.pk %}" class="btn btn-sm btn-outline-success">+ Create New Food</a>
+                <a href="{% url 'locations:food-add' location.pk %}" class="btn btn-sm btn-outline-success">+ Add Existing Food</a>
+                </span>
             </div>
             {% with foods=location.foods.all %}
             {% if foods %}

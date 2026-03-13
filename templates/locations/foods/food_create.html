@@ -1,13 +1,13 @@
 {% extends 'common/base.html' %}
 
-{% block title %}Add Food to {{ location.name }} – BattleBugz{% endblock %}
+{% block title %}Create New Food at {{ location.name }} – BattleBugz{% endblock %}
 
 {% block content %}
 <div class="container py-4" style="max-width: 560px;">
     <div class="d-flex align-items-center gap-3 mb-4">
         <a href="{% url 'locations:details' location.pk %}" class="btn btn-outline-secondary btn-sm">← Back</a>
-        <h2 class="mb-0">Add Food
-            <span class="text-muted fw-normal fs-5">to {{ location.name }}</span>
+        <h2 class="mb-0">Create New Food
+            <span class="text-muted fw-normal fs-5">at {{ location.name }}</span>
         </h2>
     </div>
 
@@ -52,7 +52,7 @@
         </div>
 
         <div class="d-flex gap-2 mt-3">
-            <button type="submit" class="btn btn-success px-4">Add Food</button>
+            <button type="submit" class="btn btn-success px-4">Create New Food</button>
             <a href="{% url 'locations:details' location.pk %}" class="btn btn-outline-secondary">Cancel</a>
         </div>
 
