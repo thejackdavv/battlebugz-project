@@ -26,14 +26,15 @@ class SoftDeleteModel(models.Model):
 
     def delete(self, using=None, keep_parents=False):
         self.deleted_at = timezone.now()
-        self.save()
+        self.save(update_fields=['deleted_at'])
+        return (1, {self._meta.label: 1})
 
-    def hard_delete(self):
-        super().delete()
+    def hard_delete(self, using=None, keep_parents=False):
+        return super().delete(using=using, keep_parents=keep_parents)
 
     def restore(self):
         self.deleted_at = None
-        self.save()
+        self.save(update_fields=['deleted_at'])
 
     class Meta:
         abstract = True
