@@ -73,8 +73,8 @@ BattleBugz/
 ├── battles/             # Battle model, views, urls
 │   ├── battle_system.py     # Battle simulation engine
 ├── common/              # Shared: base template, homepage, mixins, templatetags, migrations
-│   ├── migrations/
-│   │   └── 0001_seed_example_data.py   # Example data migration
+│   ├── fixtures/
+│   │   └── initial_data.json   # Example data fixture
 │   ├── mixins.py            # PaginatorMixin, SearchBarMixin, CombinedMixin
 │   └── templatetags/
 │       └── query_keeper_tag.py  # Preserves query params across paginated/filtered pages
