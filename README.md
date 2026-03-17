@@ -229,28 +229,30 @@ Warning! This will delete all data in the database and reset it to a clean state
 
 ## URL Reference
 
-| URL Pattern                               | Page                      |
-|-------------------------------------------|---------------------------|
-| `/`                                       | Homepage                  |
-| `/bugs/`                                  | Bug list                  |
-| `/bugs/create/`                           | Create a new bug          |
-| `/bugs/<pk>/`                             | Bug detail                |
-| `/bugs/<pk>/edit/`                        | Edit bug                  |
-| `/bugs/<pk>/delete/`                      | Delete bug                |
-| `/bugs/<pk>/change-active/`               | Activate bug              |
-| `/locations/`                             | Location list             |
-| `/locations/create/`                      | Create a location         |
-| `/locations/<pk>/`                        | Location detail + forage  |
-| `/locations/<pk>/edit/`                   | Edit location             |
-| `/locations/<pk>/delete/`                 | Delete location           |
-| `/locations/<pk>/foods/create/`           | Add food to location      |
-| `/locations/<pk>/foods/<food_pk>/delete/` | Delete food permanently   |
-| `/locations/<pk>/foods/<food_pk>/remove/` | Remove food from location |
-| `/locations/<pk>/forage/`                 | Forage action (POST)      |
-| `/battles/`                               | Battle history            |
-| `/battles/<pk>/`                          | Battle detail / round log |
-| `/battles/start/<location_pk>/`           | Start a battle (POST)     |
-| `/admin/`                                 | Django admin panel        |
+| URL Pattern                               | Page                          |
+|-------------------------------------------|-------------------------------|
+| `/`                                       | Homepage                      |
+| `/bugs/`                                  | Bug list                      |
+| `/bugs/create/`                           | Create a new bug              |
+| `/bugs/<pk>/`                             | Bug detail                    |
+| `/bugs/<pk>/edit/`                        | Edit bug                      |
+| `/bugs/<pk>/delete/`                      | Delete bug                    |
+| `/bugs/<pk>/change-active/`               | Activate bug                  |
+| `/locations/`                             | Location list                 |
+| `/locations/create/`                      | Create a location             |
+| `/locations/<pk>/`                        | Location detail + forage      |
+| `/locations/<pk>/edit/`                   | Edit location                 |
+| `/locations/<pk>/delete/`                 | Delete location               |
+| `/locations/<pk>/foods/create/`           | Create new food at location   |
+| `/locations/<pk>/foods/add/`              | Add existing food to location |
+| `/locations/<pk>/foods/<food_pk>/delete/` | Delete food permanently       |
+| `/locations/<pk>/foods/<food_pk>/remove/` | Remove food from location     |
+| `/locations/<pk>/forage/`                 | Forage action (POST)          |
+| `/battles/`                               | Battle history                |
+| `/battles/<pk>/`                          | Battle detail / round log     |
+| `/battles/start/<location_pk>/`           | Start a battle (POST)         |
+| `/battles/<pk>/delete/`                   | Delete a battle               |
+| `/admin/`                                 | Django admin panel            |
 
 ---
 
