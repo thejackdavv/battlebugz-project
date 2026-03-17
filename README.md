@@ -292,5 +292,7 @@ Attacker and defender **swap roles every round**. Maximum 50 rounds — if both 
 
 Foraging picks a **random food** from the location's food list and permanently increases the active bug's corresponding stat by `food.increase_amount`. The event is logged in `FoodEvent` for history tracking.
 
+---
+
 If you encounter any bugs in the app - feedback is greatly appreciated!  
 Happy bug battling! 🐛⚔️
