@@ -73,8 +73,8 @@ BattleBugz/
 ├── battles/             # Battle model, views, urls
 │   ├── battle_system.py     # Battle simulation engine
 ├── common/              # Shared: base template, homepage, mixins, templatetags, migrations
-│   ├── migrations/
-│   │   └── 0001_seed_example_data.py   # Example data migration
+│   ├── fixtures/
+│   │   └── initial_data.json   # Example data fixture
 │   ├── mixins.py            # PaginatorMixin, SearchBarMixin, CombinedMixin
 │   └── templatetags/
 │       └── query_keeper_tag.py  # Preserves query params across paginated/filtered pages
@@ -293,6 +293,8 @@ Attacker and defender **swap roles every round**. Maximum 50 rounds — if both 
 ### Foraging
 
 Foraging picks a **random food** from the location's food list and permanently increases the active bug's corresponding stat by `food.increase_amount`. The event is logged in `FoodEvent` for history tracking.
+
+---
 
 If you encounter any bugs in the app - feedback is greatly appreciated!  
 Happy bug battling! 🐛⚔️
