@@ -3,7 +3,12 @@
 
 {% block content %}
 <div class="container py-4">
-    <h1 class="mb-4">⚔️ Battle History</h1>
+    <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3 mb-4">
+        <div>
+            <h1 class="mb-1">⚔️ Battle History</h1>
+            <p class="text-muted mb-0">Browse recorded battles, inspect results, and manage old battle logs.</p>
+        </div>
+    </div>
 
     {% if battles %}
     <div class="table-responsive">
@@ -17,6 +22,7 @@
                     <th class="text-center">Rounds</th>
                     <th>🏆 Winner</th>
                     <th>Date</th>
+                    <th></th>
                     <th></th>
                 </tr>
             </thead>
@@ -68,6 +74,9 @@
                     <td>
                         <a href="{% url 'battles:detail' battle.pk %}" class="btn btn-sm btn-outline-primary">View</a>
                     </td>
+                    <td>
+                        <a href="{% url 'battles:delete' battle.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -76,5 +85,7 @@
     {% else %}
         <div class="alert alert-info">No battles recorded yet.</div>
     {% endif %}
+
+    {% include 'common/paginator.html' %}
 </div>
 {% endblock %}

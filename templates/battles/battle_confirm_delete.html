@@ -1,0 +1,96 @@
+{% extends 'common/base.html' %}
+
+{% block title %}Delete Battle – BattleBugz{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="mx-auto" style="max-width: 760px;">
+        <div class="card border-danger shadow-sm">
+            <div class="card-header bg-danger text-white py-3">
+                <div class="d-flex align-items-center justify-content-center gap-2 fw-semibold">
+                    <span class="fs-5">⚠️</span>
+                    <span>Delete Battle Record</span>
+                </div>
+            </div>
+
+            <div class="card-body p-4 p-md-5">
+                <div class="text-center mb-4">
+                    <p class="text-uppercase text-danger fw-semibold small mb-2">This action cannot be undone</p>
+                    <h2 class="h4 fw-bold mb-2">Remove this battle from history?</h2>
+                    <p class="text-muted mb-0">
+                        You are about to delete the recorded fight between
+                        <strong>{{ battle.attacker.name }}</strong> and <strong>{{ battle.defender.name }}</strong>.
+                    </p>
+                </div>
+
+                <div class="alert alert-warning border-warning-subtle bg-warning bg-opacity-10 text-center mb-4">
+                    <div class="fw-semibold mb-1">Battle summary</div>
+                    <div class="small text-muted">
+                        📍 {{ battle.location }} &nbsp;·&nbsp;
+                        🕒 {{ battle.rounds }} round{{ battle.rounds|pluralize }} &nbsp;·&nbsp;
+                        🏆 Winner: {{ battle.winner }}
+                    </div>
+                </div>
+
+                <div class="row g-3 mb-4 align-items-stretch">
+                    <div class="col-md-5">
+                        <div class="card h-100 border-0 bg-light">
+                            <div class="card-body text-center">
+                                <div class="text-muted small text-uppercase fw-semibold mb-2">Attacker</div>
+                                <img src="{{ battle.attacker.image_url }}" alt="{{ battle.attacker.name }}"
+                                     class="rounded mb-3 object-fit-contain" style="height: 120px; width: 100%;">
+                                <h3 class="h5 mb-1">{{ battle.attacker.name }}</h3>
+                                <span class="badge
+                                    {% if battle.attacker.type == 'FIRE' %}bg-danger
+                                    {% elif battle.attacker.type == 'WATER' %}bg-primary
+                                    {% elif battle.attacker.type == 'EARTH' %}bg-warning text-dark
+                                    {% elif battle.attacker.type == 'GRASS' %}bg-success
+                                    {% endif %}">
+                                    {{ battle.attacker.get_type_display }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2 d-flex align-items-center justify-content-center">
+                        <div class="text-center w-100">
+                            <div class="badge rounded-pill text-bg-dark px-3 py-2 fs-6">VS</div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-5">
+                        <div class="card h-100 border-0 bg-light">
+                            <div class="card-body text-center">
+                                <div class="text-muted small text-uppercase fw-semibold mb-2">Defender</div>
+                                <img src="{{ battle.defender.image_url }}" alt="{{ battle.defender.name }}"
+                                     class="rounded mb-3 object-fit-contain" style="height: 120px; width: 100%;">
+                                <h3 class="h5 mb-1">{{ battle.defender.name }}</h3>
+                                <span class="badge
+                                    {% if battle.defender.type == 'FIRE' %}bg-danger
+                                    {% elif battle.defender.type == 'WATER' %}bg-primary
+                                    {% elif battle.defender.type == 'EARTH' %}bg-warning text-dark
+                                    {% elif battle.defender.type == 'GRASS' %}bg-success
+                                    {% endif %}">
+                                    {{ battle.defender.get_type_display }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                        <button type="submit" class="btn btn-danger px-sm-4">
+                            Yes, delete battle
+                        </button>
+                        <a href="{% url 'battles:list' %}" class="btn btn-outline-secondary px-sm-4">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,7 +1,8 @@
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse_lazy
 from django.views.decorators.http import require_POST
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, ListView, DeleteView
 
 from battles.battle_system import create_battle
 from battles.models import Battle
@@ -42,3 +43,8 @@ class BattleListView(ListView):
     queryset = Battle.objects.select_related('attacker', 'defender', 'winner', 'location').order_by('-time_stamp')
     template_name = 'battles/battle_list.html'
     context_object_name = 'battles'
+    paginate_by = 5
+
+class BattleDeleteView(DeleteView):
+    model = Battle
+    success_url = reverse_lazy('battles:list')

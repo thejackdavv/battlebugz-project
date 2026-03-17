@@ -4,7 +4,7 @@ from django.db import transaction
 
 from battles.models import Battle
 
-MAX_ROUND = 100
+MAX_ROUND = 50
 
 def simulate_battle(attacker, defender):
 
@@ -31,7 +31,7 @@ def simulate_battle(attacker, defender):
             damage = 0
             round_data['dodged'] = True
         else:
-            damage = max(attacker.strength - defender.armor, 0)
+            damage = max(attacker.strength - defender.armor * 0.5, 0)
             defender_hp -= damage
             round_data['dodged'] = False
 

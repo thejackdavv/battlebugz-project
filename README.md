@@ -48,7 +48,7 @@ BattleBugz is a single-player web game built with Django. You manage a roster of
 ### ⚔️ Battles
 - Select an opponent bug at a location and start a battle
 - Battles are **fully simulated** round-by-round using a deterministic formula:
-  - Damage = `max(attacker.strength − defender.armor, 0)`
+  - Damage = `max(attacker.strength − defender.armor × 0.5, 0)`
   - Defenders have a **dodge chance** based on their Mobility stat
   - After surviving a hit, the defender regenerates `healing_factor × 0.5` HP (capped at max)
   - Roles **swap each round** (attacker and defender alternate)
