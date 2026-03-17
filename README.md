@@ -282,7 +282,7 @@ Each bug's elemental type gives it a small boost to one stat:
 
 ```
 dodge_chance  = defender.mobility / (defender.mobility + 100)
-damage        = max(attacker.strength - defender.armor, 0)
+damage        = max(attacker.strength - defender.armor × 0.5, 0)
 regen per hit = defender.healing_factor × 0.5   (capped at max HP)
 ```
 
