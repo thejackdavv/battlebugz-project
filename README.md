@@ -52,7 +52,7 @@ BattleBugz is a single-player web game built with Django. You manage a roster of
   - Defenders have a **dodge chance** based on their Mobility stat
   - After surviving a hit, the defender regenerates `healing_factor × 0.5` HP (capped at max)
   - Roles **swap each round** (attacker and defender alternate)
-  - Battle ends when one bug reaches 0 HP, or after 100 rounds (stamina draw)
+  - Battle ends when one bug reaches 0 HP, or after 50 rounds (defender wins)
 - Full round log stored in the database and displayed in a 3-column layout: attacker · log · defender
 - Browse your full battle history with outcomes and timestamps
 
@@ -286,8 +286,11 @@ damage        = max(attacker.strength - defender.armor × 0.5, 0)
 regen per hit = defender.healing_factor × 0.5   (capped at max HP)
 ```
 
-Attacker and defender **swap roles every round**. Maximum 100 rounds — if both bugs survive, the one still standing (higher HP) is declared the winner.
+Attacker and defender **swap roles every round**. Maximum 50 rounds — if both bugs survive, the defender is declared the winner.
 
 ### Foraging
 
 Foraging picks a **random food** from the location's food list and permanently increases the active bug's corresponding stat by `food.increase_amount`. The event is logged in `FoodEvent` for history tracking.
+
+If you encounter any bugs in the app - feedback is greatly appreciated!  
+Happy bug battling! 🐛⚔️
