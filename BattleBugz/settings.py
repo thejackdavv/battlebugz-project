@@ -36,6 +36,7 @@ PROJECT_APPS = [
     'locations',
     'battles',
     'common',
+    'accounts',
 ]
 
 INSTALLED_APPS = [
@@ -140,3 +141,6 @@ CACHES = {
         "LOCATION": "footer-count-cache",
     }
 }
+
+LOGIN_REDIRECT_URL = 'common:welcome'
+LOGOUT_REDIRECT_URL = 'common:welcome'
