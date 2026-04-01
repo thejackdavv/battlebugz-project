@@ -1,0 +1,106 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title %}{{ profile.user.username }} – Profile – BattleBugz{% endblock %}
+
+{% block content %}
+<div class="container py-4 py-md-5">
+    {# ── Navigation ────────────────────────────────────────── #}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <a href="{% url 'common:welcome' %}" class="btn btn-outline-secondary btn-sm">← Back to Home</a>
+        {% if user.is_authenticated and user == profile.user %}
+            <div class="d-flex gap-2">
+                <a href="{% url 'accounts:edit-view' user.pk %}" class="btn btn-sm btn-outline-primary">✏️ Edit Profile</a>
+                <a href="{% url 'accounts:delete-view' user.pk %}" class="btn btn-sm btn-outline-danger">🗑 Delete Account</a>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="row g-4 justify-content-center">
+        {# ── Profile Card ────────────────────────────────────── #}
+        <div class="col-12 col-lg-10">
+            <div class="card shadow-sm border-0 overflow-hidden">
+                <div class="card-header bg-dark text-white p-4">
+                    <div class="row align-items-center">
+                        <div class="col-auto">
+                            <img src="https://ui-avatars.com/api/?name={{ profile.user.username }}&background=random&size=120"
+                                 class="rounded-circle border border-4 border-light shadow"
+                                 alt="{{ profile.user.username }}">
+                        </div>
+                        <div class="col">
+                            <h2 class="mb-1 display-6 fw-bold">{{ profile.user.username }}</h2>
+                            <p class="mb-0 text-white-50">
+                                🗓️ Member since {{ profile.user.date_joined|date:"jS M Y" }}
+                            </p>
+                        </div>
+                        <div class="col-auto">
+                            {% if user == profile.user %}
+                                <span class="badge bg-primary px-3 py-2">My Profile</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body p-4 p-md-5">
+                    <div class="row g-5">
+                        {# ── About Section ────────────────────────── #}
+                        <div class="col-md-7">
+                            <h4 class="mb-4 border-bottom pb-2">About Me</h4>
+                            {% if profile.bio %}
+                                <p class="lead text-dark" style="white-space: pre-wrap;">{{ profile.bio }}</p>
+                            {% else %}
+                                <p class="text-muted fst-italic">This user hasn't shared a bio yet.</p>
+                            {% endif %}
+                        </div>
+
+                        {# ── Details Section ──────────────────────── #}
+                        <div class="col-md-5">
+                            <h4 class="mb-4 border-bottom pb-2">Account Details</h4>
+                            <div class="d-flex flex-column gap-3">
+                                <div class="p-3 bg-light rounded shadow-sm border-start border-4 border-primary">
+                                    <div class="text-muted small text-uppercase fw-bold mb-1">Full Name</div>
+                                    <div class="h5 mb-0">
+                                        {% if profile.user.get_full_name %}
+                                            {{ profile.user.get_full_name }}
+                                        {% else %}
+                                            <span class="text-muted fst-italic">Not provided</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <div class="p-3 bg-light rounded shadow-sm border-start border-4 border-info">
+                                    <div class="text-muted small text-uppercase fw-bold mb-1">Email</div>
+                                    <div class="h5 mb-0 text-truncate">
+                                        {% if profile.user.email %}
+                                            {{ profile.user.email }}
+                                        {% else %}
+                                            <span class="text-muted fst-italic">N/A</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <div class="p-3 bg-light rounded shadow-sm border-start border-4 border-success">
+                                    <div class="text-muted small text-uppercase fw-bold mb-1">Date of Birth</div>
+                                    <div class="h5 mb-0">
+                                        {% if profile.date_of_birth %}
+                                            {{ profile.date_of_birth|date:"F d, Y" }}
+                                        {% else %}
+                                            <span class="text-muted fst-italic">Not provided</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer bg-light p-4 text-center">
+                    <p class="mb-0 text-muted small">
+                        BattleBugz User ID: #{{ profile.user.id|stringformat:"05d" }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
