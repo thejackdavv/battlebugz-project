@@ -19,7 +19,7 @@
         <div class="col-md-8">
             <div class="d-flex align-items-center gap-2 mb-1">
                 <h2 class="mb-0">{{ bug.name }}</h2>
-                {% if bug.is_active %}<span class="badge bg-success">Active</span>{% endif %}
+                {% if request.user.profile.active_bug == bug %}<span class="badge bg-success">Active</span>{% endif %}
                 <span class="badge
                     {% if bug.type == 'FIRE' %}bg-danger
                     {% elif bug.type == 'WATER' %}bg-primary
@@ -58,7 +58,7 @@
                 </li>
             </ul>
 
-            {% if bug.is_active %}
+            {% if request.user.profile.active_bug == bug %}
                 <button class="btn btn-success w-100" disabled>✔ Currently Active</button>
             {% else %}
                 <a href="{% url 'bugs:change_active' bug.pk %}" class="btn btn-outline-success w-100">

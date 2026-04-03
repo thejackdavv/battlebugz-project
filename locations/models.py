@@ -27,6 +27,13 @@ class Location(SoftDeleteModel):
         verbose_name='Location Image'
     )
 
+    inhabitants = models.ManyToManyField(
+        to="bugs.Bug",
+        blank=True,
+        related_name='locations',
+        help_text="All bugs that can be found at this location",
+    )
+
     description = models.TextField()
 
     def __str__(self):

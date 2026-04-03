@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 
+
 # Create your models here.
 
 UserModel = get_user_model()
@@ -18,6 +19,13 @@ class Profile(models.Model):
     )
 
     bio = models.TextField(
+        null=True,
+        blank=True,
+    )
+
+    active_bug = models.ForeignKey(
+        to='bugs.Bug',
+        on_delete=models.SET_NULL,
         null=True,
         blank=True,
     )

@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views import View
@@ -20,14 +21,14 @@ class LocationListView(CombinedMixin, ListView):
     template_name = 'locations/location_list.html'
     paginate_by = 4
 
-class LocationDetailView(DetailView):
+class LocationDetailView(LoginRequiredMixin, DetailView):
     model = Location
     context_object_name = 'location'
     template_name = 'locations/location_detail.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['active_bug'] = Bug.objects.filter(is_active=True).first()
+        context['active_bug'] = self.request.user.profile.active_bug if self.request.user.is_authenticated else None
         return context
 
 
@@ -123,7 +124,7 @@ class FoodRemoveFromLocationView(View):
 
 def forage_view(request, pk):
     location = get_object_or_404(Location, pk=pk)
-    active_bug = Bug.objects.filter(is_active=True).first()
+    active_bug = request.user.profile.active_bug
 
     if not active_bug:
         messages.error(request, "You need to activate a bug first")

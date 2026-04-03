@@ -21,7 +21,7 @@ def battle_start_view(request, location_pk):
         return redirect('locations:details', pk=location_pk)
 
     defender = get_object_or_404(Bug, pk=defender_id)
-    attacker = Bug.objects.filter(is_active=True).first()
+    attacker = request.user.profile.active_bug
 
     if not attacker:
         messages.error(request, 'Activate a bug to start a battle!')

@@ -64,6 +64,9 @@ class BugCreateForm(forms.ModelForm):
 
         if commit:
             bug.save()
+            # Automatically add bug to its natural habitat's inhabitants
+            if bug.natural_habitat:
+                bug.natural_habitat.inhabitants.add(bug)
         return bug
 
 class BugEditForm(forms.ModelForm):
