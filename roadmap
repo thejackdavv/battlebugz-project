@@ -2,7 +2,7 @@
 1.1 ++Done++ user created bugs should have owner as user
 1.2 ++Done++ only owner can set his own bug as active and edin/delete
 1.2 ++Done++ add inhabitants option to location edit
-1.5 password resets,, idontknow; add a link to the admin panel for staff users
+1.5 ++Done++ password resets,,; add a link to the admin panel for staff users
 2. make at least two user groups with different permissions;
     location moderators,  user managing moderators,
     and admin group that combines both and can assign users to groups
