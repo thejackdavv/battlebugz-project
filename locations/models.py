@@ -1,11 +1,11 @@
 from django.db import models
 
-from common.models import TimeStamp, SoftDeleteModel
+from common.models import TimeStamp
 
 
 # Create your models here.
 
-class Location(SoftDeleteModel):
+class Location(models.Model):
     class LocationTypeChoices(models.TextChoices):
         FIRE = 'FIRE', 'Fire'
         WATER = 'WATER', 'Water'

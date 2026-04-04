@@ -1,11 +1,9 @@
 from django.db import models
 
-from common.models import SoftDeleteModel
-
 
 # Create your models here.
 
-class Bug(SoftDeleteModel):
+class Bug(models.Model):
     class BugTypeChoices(models.TextChoices):
         FIRE = 'FIRE', 'Fire'
         WATER = 'WATER', 'Water'
@@ -55,6 +53,7 @@ class Bug(SoftDeleteModel):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
+        related_name='bugs',
     )
 
     def __str__(self):

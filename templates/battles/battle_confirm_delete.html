@@ -19,35 +19,47 @@
                     <h2 class="h4 fw-bold mb-2">Remove this battle from history?</h2>
                     <p class="text-muted mb-0">
                         You are about to delete the recorded fight between
-                        <strong>{{ battle.attacker.name }}</strong> and <strong>{{ battle.defender.name }}</strong>.
+                        <strong>{% if battle.attacker %}{{ battle.attacker.name }}{% else %}{{ battle.log.0.attacker|default:"Attacker" }} (Deleted){% endif %}</strong> and <strong>{% if battle.defender %}{{ battle.defender.name }}{% else %}{{ battle.log.0.defender|default:"Defender" }} (Deleted){% endif %}</strong>.
                     </p>
                 </div>
 
                 <div class="alert alert-warning border-warning-subtle bg-warning bg-opacity-10 text-center mb-4">
                     <div class="fw-semibold mb-1">Battle summary</div>
                     <div class="small text-muted">
-                        📍 {{ battle.location }} &nbsp;·&nbsp;
+                        📍 {{ battle.location|default:"(Deleted Location)" }} &nbsp;·&nbsp;
                         🕒 {{ battle.rounds }} round{{ battle.rounds|pluralize }} &nbsp;·&nbsp;
-                        🏆 Winner: {{ battle.winner }}
+                        🏆 Winner:
+                        {% if battle.winner %}
+                            {{ battle.winner }}
+                        {% else %}
+                            {% with last_round=battle.log|last %}
+                                {{ last_round.attacker|default:"Deleted" }} (Deleted)
+                            {% endwith %}
+                        {% endif %}
                     </div>
                 </div>
 
                 <div class="row g-3 mb-4 align-items-stretch">
                     <div class="col-md-5">
                         <div class="card h-100 border-0 bg-light">
-                            <div class="card-body text-center">
+                            <div class="card-body text-center d-flex flex-column justify-content-center">
                                 <div class="text-muted small text-uppercase fw-semibold mb-2">Attacker</div>
-                                <img src="{{ battle.attacker.image_url }}" alt="{{ battle.attacker.name }}"
-                                     class="rounded mb-3 object-fit-contain" style="height: 120px; width: 100%;">
-                                <h3 class="h5 mb-1">{{ battle.attacker.name }}</h3>
-                                <span class="badge
-                                    {% if battle.attacker.type == 'FIRE' %}bg-danger
-                                    {% elif battle.attacker.type == 'WATER' %}bg-primary
-                                    {% elif battle.attacker.type == 'EARTH' %}bg-warning text-dark
-                                    {% elif battle.attacker.type == 'GRASS' %}bg-success
-                                    {% endif %}">
-                                    {{ battle.attacker.get_type_display }}
-                                </span>
+                                {% if battle.attacker %}
+                                    <img src="{{ battle.attacker.image_url }}" alt="{{ battle.attacker.name }}"
+                                         class="rounded mb-3 object-fit-contain" style="height: 120px; width: 100%;">
+                                    <h3 class="h5 mb-1">{{ battle.attacker.name }}</h3>
+                                    <span class="badge
+                                        {% if battle.attacker.type == 'FIRE' %}bg-danger
+                                        {% elif battle.attacker.type == 'WATER' %}bg-primary
+                                        {% elif battle.attacker.type == 'EARTH' %}bg-warning text-dark
+                                        {% elif battle.attacker.type == 'GRASS' %}bg-success
+                                        {% endif %}">
+                                        {{ battle.attacker.get_type_display }}
+                                    </span>
+                                {% else %}
+                                    <h3 class="h5 mb-1">{{ battle.log.0.attacker|default:"Attacker" }}</h3>
+                                    <span class="text-muted small fst-italic">(Deleted)</span>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -60,19 +72,24 @@
 
                     <div class="col-md-5">
                         <div class="card h-100 border-0 bg-light">
-                            <div class="card-body text-center">
+                            <div class="card-body text-center d-flex flex-column justify-content-center">
                                 <div class="text-muted small text-uppercase fw-semibold mb-2">Defender</div>
-                                <img src="{{ battle.defender.image_url }}" alt="{{ battle.defender.name }}"
-                                     class="rounded mb-3 object-fit-contain" style="height: 120px; width: 100%;">
-                                <h3 class="h5 mb-1">{{ battle.defender.name }}</h3>
-                                <span class="badge
-                                    {% if battle.defender.type == 'FIRE' %}bg-danger
-                                    {% elif battle.defender.type == 'WATER' %}bg-primary
-                                    {% elif battle.defender.type == 'EARTH' %}bg-warning text-dark
-                                    {% elif battle.defender.type == 'GRASS' %}bg-success
-                                    {% endif %}">
-                                    {{ battle.defender.get_type_display }}
-                                </span>
+                                {% if battle.defender %}
+                                    <img src="{{ battle.defender.image_url }}" alt="{{ battle.defender.name }}"
+                                         class="rounded mb-3 object-fit-contain" style="height: 120px; width: 100%;">
+                                    <h3 class="h5 mb-1">{{ battle.defender.name }}</h3>
+                                    <span class="badge
+                                        {% if battle.defender.type == 'FIRE' %}bg-danger
+                                        {% elif battle.defender.type == 'WATER' %}bg-primary
+                                        {% elif battle.defender.type == 'EARTH' %}bg-warning text-dark
+                                        {% elif battle.defender.type == 'GRASS' %}bg-success
+                                        {% endif %}">
+                                        {{ battle.defender.get_type_display }}
+                                    </span>
+                                {% else %}
+                                    <h3 class="h5 mb-1">{{ battle.log.0.defender|default:"Defender" }}</h3>
+                                    <span class="text-muted small fst-italic">(Deleted)</span>
+                                {% endif %}
                             </div>
                         </div>
                     </div>

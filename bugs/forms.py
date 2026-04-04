@@ -62,6 +62,7 @@ class BugCreateForm(forms.ModelForm):
                 setattr(bug, stat, getattr(bug, stat) + amount)
 
 
+
         if commit:
             bug.save()
             # Automatically add bug to its natural habitat's inhabitants
