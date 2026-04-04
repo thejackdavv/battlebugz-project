@@ -16,6 +16,5 @@ class FoodAdmin(admin.ModelAdmin):
 
 @admin.register(Location)
 class LocationAdmin(admin.ModelAdmin):
-    def get_queryset(self, request):
-        return Location.all_objects.all()
+    ...
 

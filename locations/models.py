@@ -1,11 +1,11 @@
 from django.db import models
 
-from common.models import TimeStamp, SoftDeleteModel
+from common.models import TimeStamp
 
 
 # Create your models here.
 
-class Location(SoftDeleteModel):
+class Location(models.Model):
     class LocationTypeChoices(models.TextChoices):
         FIRE = 'FIRE', 'Fire'
         WATER = 'WATER', 'Water'
@@ -25,6 +25,13 @@ class Location(SoftDeleteModel):
 
     image_url = models.URLField(
         verbose_name='Location Image'
+    )
+
+    inhabitants = models.ManyToManyField(
+        to="bugs.Bug",
+        blank=True,
+        related_name='locations',
+        help_text="All bugs that can be found at this location",
     )
 
     description = models.TextField()

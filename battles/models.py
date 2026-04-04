@@ -8,25 +8,29 @@ from common.models import TimeStamp
 class Battle(TimeStamp):
     attacker = models.ForeignKey(
         to='bugs.Bug',
-        on_delete=models.PROTECT,
+        on_delete=models.SET_NULL,
+        null=True,
         related_name='battles_as_attacker',
     )
 
     defender = models.ForeignKey(
         to='bugs.Bug',
-        on_delete=models.PROTECT,
+        on_delete=models.SET_NULL,
+        null=True,
         related_name='battles_as_defender',
     )
 
     location = models.ForeignKey(
         to='locations.Location',
-        on_delete=models.PROTECT,
+        on_delete=models.SET_NULL,
+        null=True,
         related_name='battles',
     )
 
     winner = models.ForeignKey(
         to='bugs.Bug',
-        on_delete=models.PROTECT,
+        on_delete=models.SET_NULL,
+        null=True,
         related_name='won_battles',
     )
 

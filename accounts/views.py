@@ -1,9 +1,11 @@
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import PasswordChangeView, PasswordChangeDoneView
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, UpdateView, DeleteView
 
-from accounts.forms import ProfileUpdateForm
+from accounts.forms import ProfileUpdateForm, CustomPasswordChangeForm
 from accounts.models import Profile
 
 
@@ -37,3 +39,13 @@ class ProfileDeleteView(DeleteView):
         success_url = self.get_success_url()
         user.delete()
         return HttpResponseRedirect(success_url)
+
+
+class CustomPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
+    form_class = CustomPasswordChangeForm
+    success_url = reverse_lazy('accounts:password_change_done')
+    template_name = 'registration/password_change_form.html'
+
+
+class CustomPasswordChangeDoneView(LoginRequiredMixin, PasswordChangeDoneView):
+    template_name = 'registration/password_change_done.html'

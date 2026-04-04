@@ -1,11 +1,9 @@
 from django.db import models
 
-from common.models import SoftDeleteModel
-
 
 # Create your models here.
 
-class Bug(SoftDeleteModel):
+class Bug(models.Model):
     class BugTypeChoices(models.TextChoices):
         FIRE = 'FIRE', 'Fire'
         WATER = 'WATER', 'Water'
@@ -50,25 +48,22 @@ class Bug(SoftDeleteModel):
 
     description = models.TextField()
 
-    is_active = models.BooleanField(
-        default=False,
+    owner = models.ForeignKey(
+        to='accounts.Profile',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='bugs',
     )
 
     def __str__(self):
         return self.name
 
     def save(self, *args, **kwargs):
-        if self.is_active:
-            Bug.objects.filter(
-                is_active=True,
-            ).exclude(pk=self.pk).update(is_active=False)
+        is_new = self.pk is None
         super().save(*args, **kwargs)
-
-    def delete(self, *args, **kwargs):
-        if self.is_active:
-            self.is_active = False
-            super().save(update_fields=['is_active'])
-        super().delete(*args, **kwargs)
+        if is_new and self.natural_habitat:
+            self.natural_habitat.inhabitants.add(self)
 
     @property
     def total_power(self):
@@ -82,13 +77,3 @@ class Bug(SoftDeleteModel):
 
     class Meta:
         ordering = ('name',)
-        constraints = [
-            models.UniqueConstraint(
-                fields=['is_active'],
-                condition=models.Q(
-                    is_active=True,
-                    deleted_at__isnull=True,
-                ),
-                name='only_one_active_bug',
-            )
-        ]

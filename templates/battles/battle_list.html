@@ -33,6 +33,7 @@
 
                     <td>
                         <div class="d-flex align-items-center gap-2">
+                        {% if battle.attacker %}
                             <img src="{{ battle.attacker.image_url }}" style="height:36px; width:36px; object-fit:contain;">
                             <span class="fw-semibold">{{ battle.attacker.name }}</span>
                             <span class="badge
@@ -43,11 +44,22 @@
                                 {% endif %}">
                                 {{ battle.attacker.get_type_display }}
                             </span>
+                        {% else %}
+                            <span class="text-muted fst-italic">
+                                {% if battle.log.0.attacker %}
+                                    {{ battle.log.0.attacker }}
+                                {% else %}
+                                    Attacker
+                                {% endif %}
+                                <small>(Deleted)</small>
+                            </span>
+                        {% endif %}
                         </div>
                     </td>
 
                     <td>
                         <div class="d-flex align-items-center gap-2">
+                        {% if battle.defender %}
                             <img src="{{ battle.defender.image_url }}" style="height:36px; width:36px; object-fit:contain;">
                             <span class="fw-semibold">{{ battle.defender.name }}</span>
                             <span class="badge
@@ -58,15 +70,36 @@
                                 {% endif %}">
                                 {{ battle.defender.get_type_display }}
                             </span>
+                        {% else %}
+                            <span class="text-muted fst-italic">
+                                {% if battle.log.0.defender %}
+                                    {{ battle.log.0.defender }}
+                                {% else %}
+                                    Defender
+                                {% endif %}
+                                <small>(Deleted)</small>
+                            </span>
+                        {% endif %}
                         </div>
                     </td>
 
-                    <td class="small">{{ battle.location }}</td>
+                    <td class="small">{{ battle.location|default:"(Deleted Location)" }}</td>
 
                     <td class="text-center small">{{ battle.rounds }}</td>
 
                     <td>
+                        {% if battle.winner %}
                         <span class="badge bg-warning text-dark">🏆 {{ battle.winner }}</span>
+                        {% else %}
+                            <span class="text-muted fst-italic small">
+                                {% with last_round=battle.log|last %}
+                                    {% if last_round.attacker %}
+                                        🏆 {{ last_round.attacker }}
+                                    {% endif %}
+                                {% endwith %}
+                                (Deleted)
+                            </span>
+                        {% endif %}
                     </td>
 
                     <td class="text-muted small text-nowrap">{{ battle.time_stamp|date:"d M Y H:i" }}</td>

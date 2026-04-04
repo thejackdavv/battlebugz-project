@@ -11,6 +11,7 @@
         {% if user.is_authenticated and user == profile.user %}
             <div class="d-flex gap-2">
                 <a href="{% url 'accounts:edit-view' user.pk %}" class="btn btn-sm btn-outline-primary">✏️ Edit Profile</a>
+                <a href="{% url 'accounts:password-change-view' %}" class="btn btn-sm btn-outline-info">🔑 Change Password</a>
                 <a href="{% url 'accounts:delete-view' user.pk %}" class="btn btn-sm btn-outline-danger">🗑 Delete Account</a>
             </div>
         {% endif %}

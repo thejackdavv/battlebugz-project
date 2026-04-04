@@ -68,7 +68,7 @@
             </div>
 
             {# ── Battle ─────────────────────────────────────────── #}
-            {% with opponents=location.bugs.all %}
+            {% with opponents=location.inhabitants.all %}
             <div class="card mb-4
                 {% if location.type == 'FIRE' %}border-danger
                 {% elif location.type == 'WATER' %}border-primary
@@ -105,7 +105,7 @@
 
             {# ── Resident bugs ──────────────────────────────────── #}
             <h5>🐛 Resident Bugs</h5>
-            {% with bugs=location.bugs.all %}
+            {% with bugs=location.inhabitants.all %}
             {% if bugs %}
                 <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-2 mb-4">
                     {% for bug in bugs %}

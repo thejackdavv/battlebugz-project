@@ -1,5 +1,10 @@
 {% extends 'common/base.html' %}
-{% block title %}{{ battle.attacker }} vs {{ battle.defender }} – BattleBugz{% endblock %}
+{% block title %}
+    {% if battle.attacker %}{{ battle.attacker }}{% else %}{{ battle.log.0.attacker|default:"Deleted" }} (Deleted){% endif %}
+    vs
+    {% if battle.defender %}{{ battle.defender }}{% else %}{{ battle.log.0.defender|default:"Deleted" }} (Deleted){% endif %}
+    – BattleBugz
+{% endblock %}
 
 {% block content %}
 <div class="container py-4">
@@ -7,16 +12,25 @@
     {# ── Header ─────────────────────────────────────────────── #}
     <div class="text-center mb-4">
         <h2 class="fw-bold">⚔️ Battle Report</h2>
-        <p class="text-muted mb-1">📍 {{ battle.location }} &nbsp;·&nbsp; {{ battle.rounds }} round{{ battle.rounds|pluralize }}</p>
-        <span class="badge bg-warning text-dark fs-6">🏆 Winner: {{ battle.winner }}</span>
+        <p class="text-muted mb-1">📍 {{ battle.location|default:"(Deleted Location)" }} &nbsp;·&nbsp; {{ battle.rounds }} round{{ battle.rounds|pluralize }}</p>
+        <span class="badge bg-warning text-dark fs-6">🏆 Winner:
+            {% if battle.winner %}
+                {{ battle.winner }}
+            {% else %}
+                {% with last_round=battle.log|last %}
+                    {{ last_round.attacker|default:"Deleted" }} (Deleted)
+                {% endwith %}
+            {% endif %}
+        </span>
     </div>
 
     <div class="row g-3 align-items-start">
 
         {# ── Attacker card ──────────────────────────────────── #}
         <div class="col-md-3">
-            <div class="card h-100 shadow-sm {% if battle.winner == battle.attacker %}border-warning border-2{% endif %}">
+            <div class="card h-100 shadow-sm {% if battle.winner and battle.winner == battle.attacker %}border-warning border-2{% endif %}">
                 <div class="card-header text-center fw-semibold small text-muted">Attacker</div>
+                {% if battle.attacker %}
                 <img src="{{ battle.attacker.image_url }}" class="card-img-top object-fit-contain p-2"
                      style="height: 140px;" alt="{{ battle.attacker.name }}">
                 <div class="card-body text-center">
@@ -51,6 +65,14 @@
                         </li>
                     </ul>
                 </div>
+                {% else %}
+                    <div class="card-body text-center d-flex flex-column justify-content-center" style="min-height: 200px;">
+                        <span class="text-muted fst-italic">
+                            <strong>{{ battle.log.0.attacker|default:"Attacker" }}</strong><br>
+                            <small>(Deleted)</small>
+                        </span>
+                    </div>
+                {% endif %}
             </div>
         </div>
 
@@ -101,8 +123,9 @@
 
         {# ── Defender card ──────────────────────────────────── #}
         <div class="col-md-3">
-            <div class="card h-100 shadow-sm {% if battle.winner == battle.defender %}border-warning border-2{% endif %}">
+            <div class="card h-100 shadow-sm {% if battle.winner and battle.winner == battle.defender %}border-warning border-2{% endif %}">
                 <div class="card-header text-center fw-semibold small text-muted">Defender</div>
+                {% if battle.defender %}
                 <img src="{{ battle.defender.image_url }}" class="card-img-top object-fit-contain p-2"
                      style="height: 140px;" alt="{{ battle.defender.name }}">
                 <div class="card-body text-center">
@@ -137,6 +160,14 @@
                         </li>
                     </ul>
                 </div>
+            {% else %}
+                <div class="card-body text-center d-flex flex-column justify-content-center" style="min-height: 200px;">
+                    <span class="text-muted fst-italic">
+                        <strong>{{ battle.log.0.defender|default:"Defender" }}</strong><br>
+                        <small>(Deleted)</small>
+                    </span>
+                </div>
+            {% endif %}
             </div>
         </div>
 

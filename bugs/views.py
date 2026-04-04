@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -14,22 +15,28 @@ class BugListView(CombinedMixin, ListView):
     context_object_name = 'bugs'
     paginate_by = 4
 
-class BugDetailView(DetailView):
+class BugDetailView(LoginRequiredMixin, DetailView):
     model = Bug
     context_object_name = 'bug'
 
-class BugCreateView(CreateView):
+class BugCreateView(LoginRequiredMixin, CreateView):
     model = Bug
     form_class = BugCreateForm
     template_name = 'bugs/bug_create.html'
+
+    def form_valid(self, form):
+        if not self.request.user.is_staff:
+            form.instance.owner = self.request.user.profile
+        return super().form_valid(form)
 
     def get_success_url(self):
         return reverse_lazy('bugs:details', kwargs={'pk': self.object.pk})
 
 def change_active_bug(request, pk):
     bug = Bug.objects.get(pk=pk)
-    bug.is_active = not bug.is_active
-    bug.save()
+    if request.user.profile == bug.owner:
+        request.user.profile.active_bug = bug
+        request.user.profile.save()
     return redirect('bugs:details', pk=pk)
 
 class BugEditView(UpdateView):

@@ -11,14 +11,21 @@ class LocationBaseForm(forms.ModelForm):
             'name': {
                 'required' : 'How would you visit a place without a name?'
             },
+            'type': {
+              'required' : 'What kind of location?'
+            },
+            'image_url': {
+                'required' : 'What does it look like?'
+            },
             'description': {
                 'required' : 'A place without a description is like a book without words.'
-            }
+            },
         }
 
         widgets = {
             'name': forms.TextInput(attrs={'placeholder': 'Enter location name'}),
             'description': forms.Textarea(attrs={'placeholder': 'Describe the location'}),
+            'inhabitants': forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'}),
         }
 
 class LocationCreateForm(LocationBaseForm):
