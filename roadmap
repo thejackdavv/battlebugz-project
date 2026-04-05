@@ -6,6 +6,7 @@
 2. make at least two user groups with different permissions;
     location moderators,  user managing moderators,
     and admin group that combines both and can assign users to groups
+2.5 add functionality to views and templates for groups and permissions
 3. add error messages to forms, +help texts, labels and placeholders where missing
 4. 90% CBVs - needs checking
 5. at least one api endpoint, user management perhaps

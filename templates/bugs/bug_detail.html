@@ -37,10 +37,10 @@
                 <p class="small text-muted mb-0">
                     👤 Owner:
                     {% if bug.owner %}
-                        <span class="{% if bug.owner == request.user.profile %}fw-bold text-primary{% endif %}">
+                        <a href="{% url 'accounts:profile-view' bug.owner.pk %}" class="{% if bug.owner == request.user.profile %}fw-bold text-primary{% endif %}">
                             {{ bug.owner.user.username }}
                             {% if bug.owner == request.user.profile %}(You){% endif %}
-                        </span>
+                        </a>
                     {% else %}
                         <span class="fst-italic">Wild</span>
                     {% endif %}
