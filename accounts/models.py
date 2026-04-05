@@ -33,3 +33,9 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
+
+    class Meta:
+        permissions = [
+            ("can_assign_groups", "Can assign users to groups"),
+            ("can_set_unusable_password", "Can set unusable password (ban)"),
+        ]

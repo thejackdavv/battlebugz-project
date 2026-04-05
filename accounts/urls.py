@@ -3,7 +3,8 @@ from django.urls import path, include
 
 from accounts.views import (
     RegisterView, ProfileDetailView, ProfileUpdateView, ProfileDeleteView,
-    CustomPasswordChangeView, CustomPasswordChangeDoneView
+    CustomPasswordChangeView, CustomPasswordChangeDoneView, SetUnusablePasswordView,
+    AssignGroupView
 )
 
 app_name = 'accounts'
@@ -20,6 +21,8 @@ urlpatterns = [
         path('', ProfileDetailView.as_view(), name='profile-view'),
         path('edit/', ProfileUpdateView.as_view(), name='edit-view'),
         path('delete/', ProfileDeleteView.as_view(), name='delete-view'),
+        path('ban/', SetUnusablePasswordView.as_view(), name='set-unusable-password'),
+        path('assign-group/', AssignGroupView.as_view(), name='assign-group'),
     ])),
     path('', include(password_actions_patterns))
 ]

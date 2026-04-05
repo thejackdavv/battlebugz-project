@@ -23,7 +23,7 @@
         <div class="card">
             <div class="card-body row g-3">
                 <div class="col-12">
-                    <label for="{{ form.food.id_for_label }}" class="form-label">Food</label>
+                    <label for="{{ form.food.id_for_label }}" class="form-label">{{ form.food.label }}</label>
                     <select name="{{ form.food.html_name }}"
                             id="{{ form.food.id_for_label }}"
                             class="form-select {% if form.food.errors %}is-invalid{% endif %}">
@@ -34,6 +34,7 @@
                             </option>
                         {% endfor %}
                     </select>
+                    {% if form.food.help_text %}<div class="form-text">{{ form.food.help_text }}</div>{% endif %}
                     {% for e in form.food.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
                     {% if not form.food.field.queryset %}
                         <div class="form-text">All available foods are already added to this location.</div>

@@ -25,16 +25,18 @@
             <div class="card-body row g-3">
 
                 <div class="col-md-6">
-                    <label for="{{ form.name.id_for_label }}" class="form-label">Name</label>
+                    <label for="{{ form.name.id_for_label }}" class="form-label">{{ form.name.label }}</label>
                     <input type="text" name="{{ form.name.html_name }}"
                            id="{{ form.name.id_for_label }}"
                            class="form-control {% if form.name.errors %}is-invalid{% endif %}"
-                           value="{{ form.name.value|default:'' }}">
+                           value="{{ form.name.value|default:'' }}"
+                           placeholder="{{ form.name.field.widget.attrs.placeholder|default:'' }}">
+                    {% if form.name.help_text %}<div class="form-text">{{ form.name.help_text }}</div>{% endif %}
                     {% for e in form.name.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
                 </div>
 
                 <div class="col-md-6">
-                    <label for="{{ form.type.id_for_label }}" class="form-label">Type</label>
+                    <label for="{{ form.type.id_for_label }}" class="form-label">{{ form.type.label }}</label>
                     <select name="{{ form.type.html_name }}"
                             id="{{ form.type.id_for_label }}"
                             class="form-select {% if form.type.errors %}is-invalid{% endif %}">
@@ -45,11 +47,12 @@
                             {% endif %}
                         {% endfor %}
                     </select>
+                    {% if form.type.help_text %}<div class="form-text">{{ form.type.help_text }}</div>{% endif %}
                     {% for e in form.type.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
                 </div>
 
                 <div class="col-md-6">
-                    <label for="{{ form.natural_habitat.id_for_label }}" class="form-label">Natural Habitat</label>
+                    <label for="{{ form.natural_habitat.id_for_label }}" class="form-label">{{ form.natural_habitat.label }}</label>
                     <select name="{{ form.natural_habitat.html_name }}"
                             id="{{ form.natural_habitat.id_for_label }}"
                             class="form-select {% if form.natural_habitat.errors %}is-invalid{% endif %}">
@@ -60,24 +63,29 @@
                             {% endif %}
                         {% endfor %}
                     </select>
+                    {% if form.natural_habitat.help_text %}<div class="form-text">{{ form.natural_habitat.help_text }}</div>{% endif %}
                     {% for e in form.natural_habitat.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
                 </div>
 
                 <div class="col-md-6">
-                    <label for="{{ form.image_url.id_for_label }}" class="form-label">Image URL</label>
+                    <label for="{{ form.image_url.id_for_label }}" class="form-label">{{ form.image_url.label }}</label>
                     <input type="url" name="{{ form.image_url.html_name }}"
                            id="{{ form.image_url.id_for_label }}"
                            class="form-control {% if form.image_url.errors %}is-invalid{% endif %}"
-                           value="{{ form.image_url.value|default:'' }}">
+                           value="{{ form.image_url.value|default:'' }}"
+                           placeholder="{{ form.image_url.field.widget.attrs.placeholder|default:'' }}">
+                    {% if form.image_url.help_text %}<div class="form-text">{{ form.image_url.help_text }}</div>{% endif %}
                     {% for e in form.image_url.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
                 </div>
 
                 <div class="col-12">
-                    <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
+                    <label for="{{ form.description.id_for_label }}" class="form-label">{{ form.description.label }}</label>
                     <textarea name="{{ form.description.html_name }}"
                               id="{{ form.description.id_for_label }}"
                               rows="3"
-                              class="form-control {% if form.description.errors %}is-invalid{% endif %}">{{ form.description.value|default:'' }}</textarea>
+                              class="form-control {% if form.description.errors %}is-invalid{% endif %}"
+                              placeholder="{{ form.description.field.widget.attrs.placeholder|default:'' }}">{{ form.description.value|default:'' }}</textarea>
+                    {% if form.description.help_text %}<div class="form-text">{{ form.description.help_text }}</div>{% endif %}
                     {% for e in form.description.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
                 </div>
 
@@ -101,38 +109,43 @@
                 <div class="row g-3">
                     {% with fields=form %}
                     <div class="col-sm-6 col-lg-4">
-                        <label for="{{ form.hp_points.id_for_label }}" class="form-label">❤️ HP <span class="text-muted">(base 20)</span></label>
+                        <label for="{{ form.hp_points.id_for_label }}" class="form-label">{{ form.hp_points.label }} <span class="text-muted">(base 20)</span></label>
                         <input type="number" name="{{ form.hp_points.html_name }}" id="{{ form.hp_points.id_for_label }}"
                                class="form-control stat-input {% if form.hp_points.errors %}is-invalid{% endif %}"
                                value="{{ form.hp_points.value|default:0 }}" min="0" max="5">
+                        {% if form.hp_points.help_text %}<div class="form-text small">{{ form.hp_points.help_text }}</div>{% endif %}
                         {% for e in form.hp_points.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
                     </div>
                     <div class="col-sm-6 col-lg-4">
-                        <label for="{{ form.armor_points.id_for_label }}" class="form-label">🛡️ Armor <span class="text-muted">(base 3)</span></label>
+                        <label for="{{ form.armor_points.id_for_label }}" class="form-label">{{ form.armor_points.label }} <span class="text-muted">(base 3)</span></label>
                         <input type="number" name="{{ form.armor_points.html_name }}" id="{{ form.armor_points.id_for_label }}"
                                class="form-control stat-input {% if form.armor_points.errors %}is-invalid{% endif %}"
                                value="{{ form.armor_points.value|default:0 }}" min="0" max="5">
+                        {% if form.armor_points.help_text %}<div class="form-text small">{{ form.armor_points.help_text }}</div>{% endif %}
                         {% for e in form.armor_points.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
                     </div>
                     <div class="col-sm-6 col-lg-4">
-                        <label for="{{ form.strength_points.id_for_label }}" class="form-label">⚔️ Strength <span class="text-muted">(base 3)</span></label>
+                        <label for="{{ form.strength_points.id_for_label }}" class="form-label">{{ form.strength_points.label }} <span class="text-muted">(base 3)</span></label>
                         <input type="number" name="{{ form.strength_points.html_name }}" id="{{ form.strength_points.id_for_label }}"
                                class="form-control stat-input {% if form.strength_points.errors %}is-invalid{% endif %}"
                                value="{{ form.strength_points.value|default:0 }}" min="0" max="5">
+                        {% if form.strength_points.help_text %}<div class="form-text small">{{ form.strength_points.help_text }}</div>{% endif %}
                         {% for e in form.strength_points.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
                     </div>
                     <div class="col-sm-6 col-lg-4">
-                        <label for="{{ form.mobility_points.id_for_label }}" class="form-label">💨 Mobility <span class="text-muted">(base 3)</span></label>
+                        <label for="{{ form.mobility_points.id_for_label }}" class="form-label">{{ form.mobility_points.label }} <span class="text-muted">(base 3)</span></label>
                         <input type="number" name="{{ form.mobility_points.html_name }}" id="{{ form.mobility_points.id_for_label }}"
                                class="form-control stat-input {% if form.mobility_points.errors %}is-invalid{% endif %}"
                                value="{{ form.mobility_points.value|default:0 }}" min="0" max="5">
+                        {% if form.mobility_points.help_text %}<div class="form-text small">{{ form.mobility_points.help_text }}</div>{% endif %}
                         {% for e in form.mobility_points.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
                     </div>
                     <div class="col-sm-6 col-lg-4">
-                        <label for="{{ form.healing_factor_points.id_for_label }}" class="form-label">💚 Healing <span class="text-muted">(base 3)</span></label>
+                        <label for="{{ form.healing_factor_points.id_for_label }}" class="form-label">{{ form.healing_factor_points.label }} <span class="text-muted">(base 3)</span></label>
                         <input type="number" name="{{ form.healing_factor_points.html_name }}" id="{{ form.healing_factor_points.id_for_label }}"
                                class="form-control stat-input {% if form.healing_factor_points.errors %}is-invalid{% endif %}"
                                value="{{ form.healing_factor_points.value|default:0 }}" min="0" max="5">
+                        {% if form.healing_factor_points.help_text %}<div class="form-text small">{{ form.healing_factor_points.help_text }}</div>{% endif %}
                         {% for e in form.healing_factor_points.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
                     </div>
                     {% endwith %}

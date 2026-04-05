@@ -1,5 +1,7 @@
 from django.contrib import messages
-from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.decorators.http import require_POST
 from django.views.generic import DetailView, ListView, DeleteView
@@ -11,7 +13,7 @@ from locations.models import Location
 
 
 # Create your views here.
-
+@login_required
 @require_POST
 def battle_start_view(request, location_pk):
     location = get_object_or_404(Location, pk=location_pk)
@@ -34,7 +36,7 @@ def battle_start_view(request, location_pk):
     battle = create_battle(attacker, defender, location)
     return redirect('battles:detail' , pk=battle.pk)
 
-class BattleDetailView(DetailView):
+class BattleDetailView(LoginRequiredMixin, DetailView):
     model = Battle
     template_name = 'battles/battle_detail.html'
     context_object_name = 'battle'
@@ -45,6 +47,7 @@ class BattleListView(ListView):
     context_object_name = 'battles'
     paginate_by = 5
 
-class BattleDeleteView(DeleteView):
+class BattleDeleteView(PermissionRequiredMixin, DeleteView):
     model = Battle
     success_url = reverse_lazy('battles:list')
+    permission_required = 'battles.delete_battle'
