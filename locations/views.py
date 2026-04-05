@@ -1,5 +1,6 @@
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views import View
@@ -32,32 +33,36 @@ class LocationDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
-class LocationCreateView(CreateView):
+class LocationCreateView(PermissionRequiredMixin, CreateView):
     model = Location
     form_class = LocationCreateForm
     template_name = 'locations/location_create.html'
+    permission_required = 'locations.add_location'
 
     def get_success_url(self):
         return reverse_lazy('locations:details', kwargs={'pk': self.object.pk})
 
 
-class LocationEditView(UpdateView):
+class LocationEditView(PermissionRequiredMixin, UpdateView):
     model = Location
     form_class = LocationEditForm
     template_name = 'locations/location_edit.html'
+    permission_required = 'locations.change_location'
 
     def get_success_url(self):
         return reverse_lazy('locations:details', kwargs={'pk': self.object.pk})
 
-class LocationDeleteView(DeleteView):
+class LocationDeleteView(PermissionRequiredMixin, DeleteView):
     model = Location
     success_url = reverse_lazy('locations:list')
+    permission_required = 'locations.delete_location'
 
 
-class FoodCreateView(CreateView):
+class FoodCreateView(PermissionRequiredMixin, CreateView):
     model = Food
     form_class = FoodCreateForm
     template_name = 'locations/foods/food_create.html'
+    permission_required = 'locations.add_food'
 
     def dispatch(self, request, *args, **kwargs):
         self.location = get_object_or_404(Location, pk=kwargs['pk'])
@@ -76,9 +81,10 @@ class FoodCreateView(CreateView):
     def get_success_url(self):
         return reverse_lazy('locations:details', kwargs={'pk': self.location.pk})
 
-class FoodAddView(FormView):
+class FoodAddView(PermissionRequiredMixin, FormView):
     form_class = FoodAddForm
     template_name = 'locations/foods/food_add.html'
+    permission_required = 'locations.add_food'
 
     def dispatch(self, request, *args, **kwargs):
         self.location = get_object_or_404(Location, pk=kwargs['pk'])
@@ -100,10 +106,11 @@ class FoodAddView(FormView):
         return context
 
 
-class FoodDeleteView(DeleteView):
+class FoodDeleteView(PermissionRequiredMixin, DeleteView):
     model = Food
     template_name = 'locations/foods/food_confirm_delete.html'
     pk_url_kwarg = 'food_pk'
+    permission_required = 'locations.delete_food'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -114,7 +121,8 @@ class FoodDeleteView(DeleteView):
         return reverse_lazy('locations:details', kwargs={'pk': self.kwargs['pk']})
 
 
-class FoodRemoveFromLocationView(View):
+class FoodRemoveFromLocationView(PermissionRequiredMixin, View):
+    permission_required = 'locations.delete_food'
     def post(self, request, pk, food_pk):
         location = get_object_or_404(Location, pk=pk)
         food = get_object_or_404(Food, pk=food_pk)
@@ -122,6 +130,7 @@ class FoodRemoveFromLocationView(View):
         return redirect('locations:details', pk=pk)
 
 
+@login_required
 def forage_view(request, pk):
     location = get_object_or_404(Location, pk=pk)
     active_bug = request.user.profile.active_bug

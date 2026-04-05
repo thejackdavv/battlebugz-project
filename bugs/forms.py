@@ -14,11 +14,41 @@ from bugs.models import Bug
 
 class BugCreateForm(forms.ModelForm):
 
-    hp_points = forms.IntegerField(min_value=0, max_value=MAX_POINTS_PER_STAT)
-    armor_points = forms.IntegerField(min_value=0, max_value=MAX_POINTS_PER_STAT)
-    strength_points = forms.IntegerField(min_value=0, max_value=MAX_POINTS_PER_STAT)
-    mobility_points = forms.IntegerField(min_value=0, max_value=MAX_POINTS_PER_STAT)
-    healing_factor_points = forms.IntegerField(min_value=0, max_value=MAX_POINTS_PER_STAT)
+    hp_points = forms.IntegerField(
+        min_value=0, 
+        max_value=MAX_POINTS_PER_STAT,
+        label="HP Points",
+        help_text=f"Points to add to base health. Max {MAX_POINTS_PER_STAT}.",
+        widget=forms.NumberInput(attrs={'placeholder': '0', 'class': 'form-control'})
+    )
+    armor_points = forms.IntegerField(
+        min_value=0, 
+        max_value=MAX_POINTS_PER_STAT,
+        label="Armor Points",
+        help_text=f"Points to add to base armor. Max {MAX_POINTS_PER_STAT}.",
+        widget=forms.NumberInput(attrs={'placeholder': '0', 'class': 'form-control'})
+    )
+    strength_points = forms.IntegerField(
+        min_value=0, 
+        max_value=MAX_POINTS_PER_STAT,
+        label="Strength Points",
+        help_text=f"Points to add to base strength. Max {MAX_POINTS_PER_STAT}.",
+        widget=forms.NumberInput(attrs={'placeholder': '0', 'class': 'form-control'})
+    )
+    mobility_points = forms.IntegerField(
+        min_value=0, 
+        max_value=MAX_POINTS_PER_STAT,
+        label="Mobility Points",
+        help_text=f"Points to add to base mobility. Max {MAX_POINTS_PER_STAT}.",
+        widget=forms.NumberInput(attrs={'placeholder': '0', 'class': 'form-control'})
+    )
+    healing_factor_points = forms.IntegerField(
+        min_value=0, 
+        max_value=MAX_POINTS_PER_STAT,
+        label="Healing Points",
+        help_text=f"Points to add to base healing factor. Max {MAX_POINTS_PER_STAT}.",
+        widget=forms.NumberInput(attrs={'placeholder': '0', 'class': 'form-control'})
+    )
 
     class Meta:
         model = Bug
@@ -29,6 +59,19 @@ class BugCreateForm(forms.ModelForm):
             'image_url',
             'description',
         )
+        widgets = {
+            'name': forms.TextInput(attrs={'placeholder': 'Enter bug name', 'class': 'form-control'}),
+            'type': forms.Select(attrs={'class': 'form-control'}),
+            'natural_habitat': forms.Select(attrs={'class': 'form-control'}),
+            'image_url': forms.URLInput(attrs={'placeholder': 'https://example.com/bug.png', 'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'placeholder': 'Describe your bug...', 'class': 'form-control', 'rows': 3}),
+        }
+        help_texts = {
+            'name': 'Choose a unique name for your bug.',
+            'type': 'The type determines elemental bonuses.',
+            'natural_habitat': 'Where this bug naturally lives.',
+            'image_url': 'Link to a valid image representing your bug.',
+        }
 
     def clean(self):
         cleaned_data = super().clean()
@@ -86,6 +129,17 @@ class BugEditForm(forms.ModelForm):
             'image_url',
             'description',
         )
+        widgets = {
+            'name': forms.TextInput(attrs={'placeholder': 'Update bug name', 'class': 'form-control'}),
+            'type': forms.Select(attrs={'class': 'form-control'}),
+            'natural_habitat': forms.Select(attrs={'class': 'form-control'}),
+            'image_url': forms.URLInput(attrs={'placeholder': 'Update image URL', 'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'placeholder': 'Update description', 'class': 'form-control', 'rows': 3}),
+        }
+        help_texts = {
+            'type': 'Type cannot be changed after creation.',
+            'natural_habitat': 'Natural habitat cannot be changed after creation.',
+        }
 
 
 class BugSearchForm(forms.Form):
@@ -93,4 +147,5 @@ class BugSearchForm(forms.Form):
         max_length=100,
         required=False,
         label='',
+        widget=forms.TextInput(attrs={'placeholder': 'Search bugs by name...', 'class': 'form-control'})
     )

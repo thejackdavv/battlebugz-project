@@ -3,12 +3,12 @@
 1.2 ++Done++ only owner can set his own bug as active and edin/delete
 1.2 ++Done++ add inhabitants option to location edit
 1.5 ++Done++ password resets,,; add a link to the admin panel for staff users
-2. make at least two user groups with different permissions;
+2. ++Done++ make at least two user groups with different permissions;
     location moderators,  user managing moderators,
     and admin group that combines both and can assign users to groups
-2.5 add functionality to views and templates for groups and permissions
-3. add error messages to forms, +help texts, labels and placeholders where missing
-4. 90% CBVs - needs checking
+2.5 ++Done++ add functionality to views and templates for groups and permissions
+3. ++Done++ add error messages to forms, +help texts, labels and placeholders where missing
+4. ++Done++ 90% CBVs - needs checking
 5. at least one api endpoint, user management perhaps
 6. filters on list views; my bugs/all bugs
 7. async tasks

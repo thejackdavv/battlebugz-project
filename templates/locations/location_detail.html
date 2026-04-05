@@ -6,8 +6,12 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <a href="{% url 'locations:list' %}" class="btn btn-outline-secondary btn-sm">← Back to locations</a>
         <div class="d-flex gap-2">
+            {% if perms.locations.change_location %}
             <a href="{% url 'locations:edit' location.pk %}" class="btn btn-sm btn-outline-primary">✏️ Edit</a>
+            {% endif %}
+            {% if perms.locations.delete_location %}
             <a href="{% url 'locations:delete' location.pk %}" class="btn btn-sm btn-outline-danger">🗑 Delete</a>
+            {% endif %}
         </div>
     </div>
 
@@ -138,20 +142,24 @@
             <div class="d-flex justify-content-between align-items-center mb-2">
                 <span class="text-muted small">Foods found at this location</span>
                 <span>
+                    {% if perms.locations.add_food %}
                 <a href="{% url 'locations:food-create' location.pk %}" class="btn btn-sm btn-outline-success">+ Create New Food</a>
                 <a href="{% url 'locations:food-add' location.pk %}" class="btn btn-sm btn-outline-success">+ Add Existing Food</a>
+                    {% endif %}
                 </span>
             </div>
             {% with foods=location.foods.all %}
             {% if foods %}
-                <ul class="list-group list-group-flush">
+                <ul class="list-group list-group-flush border rounded">
                     {% for food in foods %}
-                    <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
                         <span>{{ food.name }}</span>
                         <div class="d-flex align-items-center gap-2">
                             <span class="badge bg-secondary">+{{ food.increase_amount }} {{ food.get_stat_display }}</span>
+                            {% if perms.locations.delete_food %}
                             <a href="{% url 'locations:food-delete' location.pk food.pk %}"
                                class="btn btn-sm btn-outline-danger py-0">🗑</a>
+                            {% endif %}
                         </div>
                     </li>
                     {% endfor %}

@@ -32,29 +32,25 @@
                             {% if field.name != 'bio' and field.name != 'date_of_birth' %}
                             <div class="col-md-6">
                                 <label for="{{ field.id_for_label }}" class="form-label fw-medium">{{ field.label }}</label>
-                                <input type="{{ field.field.widget.input_type|default:'text' }}"
-                                       name="{{ field.html_name }}"
-                                       id="{{ field.id_for_label }}"
-                                       class="form-control {% if field.errors %}is-invalid{% endif %}"
-                                       value="{{ field.value|default:'' }}">
+                                {{ field }}
                                 {% if field.help_text %}
                                     <div class="form-text small">{{ field.help_text|safe }}</div>
                                 {% endif %}
                                 {% for error in field.errors %}
-                                    <div class="invalid-feedback">{{ error }}</div>
+                                    <div class="invalid-feedback d-block">{{ error }}</div>
                                 {% endfor %}
                             </div>
                             {% endif %}
                         {% endfor %}
 
                         <div class="col-12">
-                            <label for="{{ form.date_of_birth.id_for_label }}" class="form-label fw-medium">Date of Birth</label>
-                            <input type="date" name="{{ form.date_of_birth.html_name }}"
-                                   id="{{ form.date_of_birth.id_for_label }}"
-                                   class="form-control {% if form.date_of_birth.errors %}is-invalid{% endif %}"
-                                   value="{{ form.date_of_birth.value|date:'Y-m-d'|default:'' }}">
+                            <label for="{{ form.date_of_birth.id_for_label }}" class="form-label fw-medium">{{ form.date_of_birth.label }}</label>
+                            {{ form.date_of_birth }}
+                            {% if form.date_of_birth.help_text %}
+                                <div class="form-text small">{{ form.date_of_birth.help_text|safe }}</div>
+                            {% endif %}
                             {% for error in form.date_of_birth.errors %}
-                                <div class="invalid-feedback">{{ error }}</div>
+                                <div class="invalid-feedback d-block">{{ error }}</div>
                             {% endfor %}
                         </div>
                     </div>
@@ -66,14 +62,13 @@
                     </div>
                     <div class="card-body p-4">
                         <div class="col-12">
-                            <label for="{{ form.bio.id_for_label }}" class="form-label fw-medium">Bio</label>
-                            <textarea name="{{ form.bio.html_name }}"
-                                      id="{{ form.bio.id_for_label }}"
-                                      rows="5"
-                                      class="form-control {% if form.bio.errors %}is-invalid{% endif %}"
-                                      placeholder="Tell us about yourself...">{{ form.bio.value|default:'' }}</textarea>
+                            <label for="{{ form.bio.id_for_label }}" class="form-label fw-medium">{{ form.bio.label }}</label>
+                            {{ form.bio }}
+                            {% if form.bio.help_text %}
+                                <div class="form-text small">{{ form.bio.help_text|safe }}</div>
+                            {% endif %}
                             {% for error in form.bio.errors %}
-                                <div class="invalid-feedback">{{ error }}</div>
+                                <div class="invalid-feedback d-block">{{ error }}</div>
                             {% endfor %}
                         </div>
                     </div>

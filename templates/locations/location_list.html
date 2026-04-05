@@ -5,7 +5,9 @@
 <div class="container py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="mb-0">🗺️ Locations</h1>
+        {% if perms.locations.add_location %}
         <a href="{% url 'locations:create' %}" class="btn btn-success">+ New Location</a>
+        {% endif %}
     </div>
 
     <div class="mb-4">

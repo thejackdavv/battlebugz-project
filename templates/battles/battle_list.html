@@ -107,9 +107,13 @@
                     <td>
                         <a href="{% url 'battles:detail' battle.pk %}" class="btn btn-sm btn-outline-primary">View</a>
                     </td>
+
                     <td>
+                    {% if perms.battles.delete_battle %}
                         <a href="{% url 'battles:delete' battle.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                    {% endif %}
                     </td>
+
                 </tr>
                 {% endfor %}
             </tbody>
