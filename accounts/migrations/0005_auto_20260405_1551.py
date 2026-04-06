@@ -9,13 +9,11 @@ def create_groups(apps, schema_editor):
     ContentType = apps.get_model('contenttypes', 'ContentType')
     Profile = apps.get_model('accounts', 'Profile')
     
-    # Ensure permissions are created for all models before we try to use them
     for app_config in apps.get_app_configs():
         app_config.models_module = True
         create_permissions(app_config, verbosity=0)
         app_config.models_module = None
 
-    # Create custom permissions for Profile
     profile_content_type = ContentType.objects.get_for_model(Profile)
     
     can_assign_groups, _ = Permission.objects.get_or_create(
@@ -30,7 +28,6 @@ def create_groups(apps, schema_editor):
         content_type=profile_content_type
     )
 
-    # Models and their app labels
     model_perms = {
         'Location Moderators': [
             ('locations', 'location'),
@@ -57,7 +54,6 @@ def create_groups(apps, schema_editor):
         group, _ = Group.objects.get_or_create(name=group_name)
         
         for app_label, model_name in models:
-            # For 'User Managing Moderators', only view, change, delete as per user request
             if group_name == 'User Managing Moderators':
                 current_actions = ['view', 'change', 'delete']
             else:
@@ -71,7 +67,6 @@ def create_groups(apps, schema_editor):
                 except Permission.DoesNotExist:
                     pass
         
-        # Add custom permissions
         if group_name == 'Global Moderators':
             group.permissions.add(can_assign_groups)
             group.permissions.add(can_set_unusable_password)

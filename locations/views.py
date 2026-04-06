@@ -22,6 +22,19 @@ class LocationListView(CombinedMixin, ListView):
     template_name = 'locations/location_list.html'
     paginate_by = 4
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        location_type = self.request.GET.get('type')
+        if location_type:
+            queryset = queryset.filter(type=location_type)
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['type_choices'] = Location.LocationTypeChoices.choices
+        context['current_type'] = self.request.GET.get('type', '')
+        return context
+
 class LocationDetailView(LoginRequiredMixin, DetailView):
     model = Location
     context_object_name = 'location'

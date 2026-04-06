@@ -10,9 +10,9 @@
 3. ++Done++ add error messages to forms, +help texts, labels and placeholders where missing
 4. ++Done++ 90% CBVs - needs checking
 5. at least one api endpoint, user management perhaps
-6. filters on list views; my bugs/all bugs
+6. ++Done++ filters on list views; my bugs/all bugs
 7. async tasks
 8. store and serve media and static
-9. deploy on cloud based platform
-10. write tests (min. 15)
+9. ++Done++ write tests (18 tests)
+10. deploy on cloud based platform
 11. update readme and initial_data

@@ -1,4 +1,5 @@
 {% extends 'common/base.html' %}
+{% load query_keeper_tag %}
 {% block title %}Battle History – BattleBugz{% endblock %}
 
 {% block content %}
@@ -8,6 +9,18 @@
             <h1 class="mb-1">⚔️ Battle History</h1>
             <p class="text-muted mb-0">Browse recorded battles, inspect results, and manage old battle logs.</p>
         </div>
+        {% if request.user.is_authenticated %}
+        <div class="btn-group" role="group" aria-label="Battle filters">
+            <a href="{% query_keeper 'filter' 'all' %}" 
+               class="btn btn-outline-primary {% if current_filter == 'all' %}active{% endif %}">
+                All Battles
+            </a>
+            <a href="{% query_keeper 'filter' 'my_battles' %}" 
+               class="btn btn-outline-primary {% if current_filter == 'my_battles' %}active{% endif %}">
+                My Battles
+            </a>
+        </div>
+        {% endif %}
     </div>
 
     {% if battles %}
