@@ -1,10 +1,15 @@
 from django.urls import path, include
 
 from bugs.views import BugListView, BugDetailView, BugCreateView, change_active_bug, BugEditView, BugDeleteView
+from bugs.api_views import BugListCreateAPIView, BugRetrieveUpdateDestroyAPIView
 
 app_name = 'bugs'
 urlpatterns = [
     path('', BugListView.as_view(), name='list'),
+    path('api/', include([
+        path('', BugListCreateAPIView.as_view(), name='api-list'),
+        path('<int:pk>/', BugRetrieveUpdateDestroyAPIView.as_view(), name='api-detail'),
+    ])),
     path('<int:pk>/', include([
         path('', BugDetailView.as_view(), name='details'),
         path('change-active/', change_active_bug, name='change_active'),
@@ -12,5 +17,4 @@ urlpatterns = [
         path('delete/', BugDeleteView.as_view(), name='delete'),
     ])),
     path('create/', BugCreateView.as_view(), name='create'),
-
 ]
