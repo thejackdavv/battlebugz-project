@@ -9,7 +9,7 @@
 2.5 ++Done++ add functionality to views and templates for groups and permissions
 3. ++Done++ add error messages to forms, +help texts, labels and placeholders where missing
 4. ++Done++ 90% CBVs - needs checking
-5. at least one api endpoint, user management perhaps
+5. ++Done++ at least one api endpoint
 6. ++Done++ filters on list views; my bugs/all bugs
 7. async tasks
 8. store and serve media and static
