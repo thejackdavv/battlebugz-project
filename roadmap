@@ -11,8 +11,8 @@
 4. ++Done++ 90% CBVs - needs checking
 5. ++Done++ at least one api endpoint
 6. ++Done++ filters on list views; my bugs/all bugs
-7. async tasks
-8. store and serve media and static
+7. ++Done++ async tasks
+8. ++Done++ store and serve media and static (WhiteNoise configured)
 9. ++Done++ write tests (18 tests)
 10. deploy on cloud based platform
 11. update readme and initial_data
