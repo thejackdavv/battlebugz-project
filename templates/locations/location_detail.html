@@ -62,12 +62,20 @@
                             <small class="text-danger">No active bug — <a href="{% url 'bugs:list' %}">activate one</a> first.</small>
                         {% endif %}
                     </div>
-                    <form method="post" action="{% url 'locations:forage' location.pk %}">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-success" {% if not active_bug %}disabled{% endif %}>
-                            Forage
-                        </button>
-                    </form>
+                    <div class="d-flex gap-2">
+                        <form method="post" action="{% url 'locations:forage' location.pk %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-success" {% if not active_bug %}disabled{% endif %}>
+                                Forage
+                            </button>
+                        </form>
+                        <form method="post" action="{% url 'locations:passive-forage' location.pk %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-success" {% if not active_bug %}disabled{% endif %}>
+                                Passive Forage
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
 

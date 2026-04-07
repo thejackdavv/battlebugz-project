@@ -1,7 +1,8 @@
 from django.urls import path, include
 
 from locations.views import LocationListView, LocationDetailView, LocationCreateView, LocationEditView, \
-    LocationDeleteView, FoodCreateView, FoodDeleteView, FoodRemoveFromLocationView, forage_view, FoodAddView
+    LocationDeleteView, FoodCreateView, FoodDeleteView, FoodRemoveFromLocationView, forage_view, FoodAddView, \
+    passive_forage_view
 
 app_name = 'locations'
 
@@ -21,6 +22,7 @@ urlpatterns = [
             path('delete/', LocationDeleteView.as_view(), name='delete'),
             path('foods/', include(foodpatterns)),
             path('forage/', forage_view, name='forage'),
+            path('passive-forage/', passive_forage_view, name='passive-forage'),
     ])),
     path('create/', LocationCreateView.as_view(), name='create'),
 ]
