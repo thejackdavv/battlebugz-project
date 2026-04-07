@@ -3,4 +3,11 @@ Django==6.0.2
 psycopg2-binary==2.9.11
 python-decouple==3.8
 sqlparse==0.5.5
-djangorestframework==3.17.1
+types-PyYAML==6.0.12.20250915
+typing_extensions==4.15.0
+tzdata==2026.1
+tzlocal==5.3.1
+urllib3==2.6.3
+vine==5.1.0
+wcwidth==0.6.0
+whitenoise==6.9.0
