@@ -44,6 +44,7 @@ class Bug(models.Model):
 
     image_url = models.URLField(
         verbose_name='Bug Image',
+        max_length=500,
     )
 
     description = models.TextField()

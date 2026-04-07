@@ -24,7 +24,8 @@ class Location(models.Model):
     )
 
     image_url = models.URLField(
-        verbose_name='Location Image'
+        verbose_name='Location Image',
+        max_length=500,
     )
 
     inhabitants = models.ManyToManyField(
