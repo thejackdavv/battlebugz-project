@@ -12,7 +12,7 @@
 5. ++Done++ at least one api endpoint
 6. ++Done++ filters on list views; my bugs/all bugs
 7. async tasks
-8. store and serve media and static
+8. ++Done++ store and serve media and static
 9. ++Done++ write tests (18 tests)
 10. deploy on cloud based platform
 11. update readme and initial_data
