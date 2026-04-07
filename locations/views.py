@@ -163,7 +163,7 @@ def forage_view(request, pk):
     return redirect('locations:details', pk=pk)
 
 
-@login_required
+@login_required(login_url='accounts:login-view')
 async def passive_forage_view(request, pk):
     location = await sync_to_async(get_object_or_404)(Location, pk=pk)
 
