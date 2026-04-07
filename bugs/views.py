@@ -45,7 +45,7 @@ class BugCreateView(LoginRequiredMixin, CreateView):
         return reverse_lazy('bugs:details', kwargs={'pk': self.object.pk})
 
 def change_active_bug(request, pk):
-    bug = Bug.objects.get(pk=pk)
+    bug = get_object_or_404(Bug, pk=pk)
     if request.user.profile == bug.owner:
         request.user.profile.active_bug = bug
         request.user.profile.save()
