@@ -159,3 +159,5 @@ CACHES = {
 
 LOGIN_REDIRECT_URL = 'common:welcome'
 LOGOUT_REDIRECT_URL = 'common:welcome'
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
