@@ -1,5 +1,4 @@
 from django.contrib import messages
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin, PermissionRequiredMixin
 from django.contrib.auth.views import PasswordChangeView, PasswordChangeDoneView
 from django.http import HttpResponseRedirect
@@ -8,7 +7,8 @@ from django.urls import reverse_lazy, reverse
 from django.views import View
 from django.views.generic import CreateView, DetailView, UpdateView, DeleteView
 
-from accounts.forms import ProfileUpdateForm, CustomPasswordChangeForm, AssignGroupForm
+from django.contrib.auth.models import Group
+from accounts.forms import ProfileUpdateForm, CustomPasswordChangeForm, AssignGroupForm, CustomUserCreationForm
 from accounts.models import Profile
 
 
@@ -16,9 +16,19 @@ from accounts.models import Profile
 
 
 class RegisterView(CreateView):
-    form_class = UserCreationForm
+    form_class = CustomUserCreationForm
     template_name = 'registration/register.html'
     success_url = reverse_lazy('accounts:login-view')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        if form.cleaned_data.get('is_moderator'):
+            group = Group.objects.filter(name='Global Moderators').first()
+            if group:
+                self.object.groups.add(group)
+            else:
+                messages.warning(self.request, "Global Moderators group not found. Please contact an admin.")
+        return response
 
 class ProfileDetailView(LoginRequiredMixin, DetailView):
     model = Profile

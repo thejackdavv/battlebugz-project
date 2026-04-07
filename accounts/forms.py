@@ -1,12 +1,23 @@
 from django import forms
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.forms import PasswordChangeForm, UserCreationForm
 from django.contrib.auth.models import Group
 from django.core.exceptions import ValidationError
 
 from accounts.models import Profile
 
 UserModel = get_user_model()
+
+class CustomUserCreationForm(UserCreationForm):
+    is_moderator = forms.BooleanField(
+        required=False,
+        label="Register as Global Moderator",
+        help_text="If checked, you will be added to the Global Moderators group."
+    )
+
+    class Meta(UserCreationForm.Meta):
+        model = UserModel
+        fields = UserCreationForm.Meta.fields + ('is_moderator',)
 
 class AssignGroupForm(forms.Form):
     groups = forms.ModelMultipleChoiceField(

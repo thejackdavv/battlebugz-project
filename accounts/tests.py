@@ -1,6 +1,46 @@
 from django.test import TestCase
 from django.urls import reverse
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
+
+class RegistrationTests(TestCase):
+    def setUp(self):
+        self.register_url = reverse('accounts:register-view')
+        # Ensure Global Moderators group exists
+        Group.objects.get_or_create(name='Global Moderators')
+
+    def test_standard_registration(self):
+        data = {
+            'username': 'standarduser',
+            'password': 'password123complex',
+            'password_confirm': 'password123complex', # Assuming standard UserCreationForm fields
+        }
+        # UserCreationForm usually has password1 and password2
+        # Let's check the actual fields in CustomUserCreationForm
+        from accounts.forms import CustomUserCreationForm
+        form = CustomUserCreationForm()
+        # print(form.fields.keys())
+        
+        data = {
+            'username': 'standarduser',
+            'password1': 'password123complex',
+            'password2': 'password123complex',
+        }
+        response = self.client.post(self.register_url, data)
+        self.assertEqual(response.status_code, 302)
+        user = User.objects.get(username='standarduser')
+        self.assertFalse(user.groups.filter(name='Global Moderators').exists())
+
+    def test_moderator_registration_via_checkbox(self):
+        data = {
+            'username': 'moduser1',
+            'password1': 'password123complex',
+            'password2': 'password123complex',
+            'is_moderator': 'on',
+        }
+        response = self.client.post(self.register_url, data)
+        self.assertEqual(response.status_code, 302)
+        user = User.objects.get(username='moduser1')
+        self.assertTrue(user.groups.filter(name='Global Moderators').exists())
 
 class PasswordChangeTests(TestCase):
     def setUp(self):
