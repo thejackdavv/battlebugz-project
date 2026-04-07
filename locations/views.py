@@ -165,10 +165,8 @@ def forage_view(request, pk):
 
 @login_required
 async def passive_forage_view(request, pk):
-    # Get the location and active bug asynchronously
     location = await sync_to_async(get_object_or_404)(Location, pk=pk)
-    
-    # helper for accessing profile/active_bug
+
     def get_active_bug():
         return request.user.profile.active_bug
         
@@ -179,9 +177,7 @@ async def passive_forage_view(request, pk):
         return redirect('locations:details', pk=pk)
 
     results = []
-    # Passive foraging: forage 3 times with 1s sleep in between
     for _ in range(3):
-        # forage function is sync, so we wrap it
         food = await sync_to_async(forage)(active_bug, location)
         if food:
             results.append(f"{food.name}")
