@@ -2,6 +2,8 @@
 
 A Django-powered creature-collecting game where you raise bugs, send them out to explore locations, forage for stat-boosting foods, and battle other bugs.
 
+Deployed version: https://battlebugz-cafrgybyddfqfte2.italynorth-01.azurewebsites.net/
+
 ---
 
 ## Table of Contents
