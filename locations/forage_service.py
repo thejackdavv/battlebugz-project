@@ -1,6 +1,4 @@
 import random
-
-from django.core.exceptions import ValidationError
 from django.db import transaction
 
 from locations.models import FoodEvent

@@ -1,3 +1,5 @@
+import asyncio
+from asgiref.sync import sync_to_async
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
@@ -5,8 +7,6 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, FormView
-
-from bugs.models import Bug
 from common.mixins import CombinedMixin
 from locations.forage_service import forage
 from locations.forms import LocationCreateForm, LocationEditForm, FoodCreateForm, FoodAddForm
@@ -160,7 +160,39 @@ def forage_view(request, pk):
             f"{active_bug.name} found {food.name} "
             f"(+{food.increase_amount} {food.get_stat_display()})"
         )
+    return redirect('locations:details', pk=pk)
+
+
+@login_required
+async def passive_forage_view(request, pk):
+    # Get the location and active bug asynchronously
+    location = await sync_to_async(get_object_or_404)(Location, pk=pk)
+    
+    # helper for accessing profile/active_bug
+    def get_active_bug():
+        return request.user.profile.active_bug
+        
+    active_bug = await sync_to_async(get_active_bug)()
+
+    if not active_bug:
+        messages.error(request, "You need to activate a bug first")
+        return redirect('locations:details', pk=pk)
+
+    results = []
+    # Passive foraging: forage 3 times with 1s sleep in between
+    for _ in range(3):
+        # forage function is sync, so we wrap it
+        food = await sync_to_async(forage)(active_bug, location)
+        if food:
+            results.append(f"{food.name}")
+        await asyncio.sleep(3)
+
+    if results:
+        messages.success(
+            request,
+            f"{active_bug.name} found: " + ", ".join(results)
+        )
     else:
-        messages.warning(request, 'No food found this time. Try again!')
+        messages.warning(request, 'No food found during passive foraging.')
 
     return redirect('locations:details', pk=pk)
